@@ -1,0 +1,37 @@
+sudo: required
+
+language: java
+
+matrix:
+  include:
+    - jdk: oraclejdk8
+    - jdk: openjdk8
+    - jdk: oraclejdk9
+    - jdk: openjdk9
+    - jdk: openjdk10
+    - jdk: oraclejdk11
+    - jdk: openjdk11
+    - jdk: oraclejdk-ea
+    - jdk: openjdk-ea
+  allow_failures:
+    - jdk: oraclejdk-ea
+    - jdk: openjdk-ea
+
+notifications:
+  email:
+    on_success: never
+
+script:
+  - ./gradlew --version
+  - ./gradlew clean
+  - if [ "$TRAVIS_JDK_VERSION" == "oraclejdk9" ]; then ./gradlew check; fi
+  - ./gradlew -Djdk.tls.client.protocols="TLSv1.2" cobertura coveralls
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
