@@ -21,6 +21,7 @@ public class RequestOptions {
     private String DISBURSEMENT_API_SECRET;
 
     private String BASE_URL = "https://ericssonbasicapi2.azure-api.net";
+    private String TARGET_ENVIRONMENT = "sandbox";
 
 
     private RequestOptions() {
@@ -75,6 +76,10 @@ public class RequestOptions {
         return this.BASE_URL;
     }
 
+    public String getTargetEnvironment() {
+        return this.TARGET_ENVIRONMENT;
+    }
+
 
     public static final class Builder {
 
@@ -91,6 +96,8 @@ public class RequestOptions {
         private String BASE_URL = "https://ericssonbasicapi2.azure-api.net";
 
         private String CURRENCY = "EUR";
+
+        private String TARGET_ENVIRONMENT = "sandbox";
 
 
         /**
@@ -185,6 +192,8 @@ public class RequestOptions {
             opts.DISBURSEMENT_API_SECRET = this.DISBURSEMENT_API_SECRET;
             opts.DISBURSEMENT_PRIMARY_KEY = this.DISBURSEMENT_PRIMARY_KEY;
             opts.DISBURSEMENT_USER_ID = this.DISBURSEMENT_USER_ID;
+            opts.BASE_URL = this.BASE_URL;
+            opts.TARGET_ENVIRONMENT = this.TARGET_ENVIRONMENT;
 
             return opts;
 

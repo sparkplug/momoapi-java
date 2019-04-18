@@ -1,13 +1,8 @@
 package ug.sparkpl.network.collections;
 
-import com.google.common.collect.ImmutableMap;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-import org.apache.tools.ant.Project;
-
-import java.util.Map;
-
 public class CollectionsClientTest {
+
+    /*
 
 
     public void testGetListUserByGroup() throws Exception {
@@ -163,6 +158,10 @@ public class CollectionsClientTest {
             server.shutdown();
         }
     }
+
+
+
+     */
 
 
 }

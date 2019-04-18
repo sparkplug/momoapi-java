@@ -46,6 +46,7 @@ public abstract class CurrentUserType {
 
     /**
      * Returns the most recently emitted user from the user observable.
+     *
      * @deprecated Prefer {@link #observable()}
      */
     @Deprecated
@@ -54,6 +55,7 @@ public abstract class CurrentUserType {
 
     /**
      * Returns a boolean that determines if there is a currently logged in user or not.
+     *
      * @deprecated Prefer {@link #observable()}
      */
     @Deprecated
@@ -74,14 +76,16 @@ public abstract class CurrentUserType {
     /**
      * Emits only values of a logged in user. The returned observable may never emit.
      */
-    public @NonNull Observable<User> loggedInUser() {
+    public @NonNull
+    Observable<User> loggedInUser() {
         return observable().filter(Utils::isNotNull);
     }
 
     /**
      * Emits only values of a logged out user. The returned observable may never emit.
      */
-    public @NonNull Observable<User> loggedOutUser() {
+    public @NonNull
+    Observable<User> loggedOutUser() {
         return observable().filter(Utils::isNull);
     }
 }

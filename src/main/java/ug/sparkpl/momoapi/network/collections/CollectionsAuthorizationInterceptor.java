@@ -4,23 +4,29 @@ package ug.sparkpl.momoapi.network.collections;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import okhttp3.Credentials;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.joda.time.DateTime;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ug.sparkpl.momoapi.Utils.DateTimeTypeConverter;
+import ug.sparkpl.momoapi.models.AccessToken;
+import ug.sparkpl.momoapi.network.ApiException;
 import ug.sparkpl.momoapi.network.RequestOptions;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CollectionsAuthorizationInterceptor implements Interceptor {
 
+    Logger logger;
     private CollectionsApiService apiService;
     private CollectionSession session;
     private RequestOptions opts;
@@ -28,6 +34,8 @@ public class CollectionsAuthorizationInterceptor implements Interceptor {
     public CollectionsAuthorizationInterceptor(CollectionSession session, RequestOptions opts) {
         this.apiService = apiService;
         this.session = session;
+        this.opts = opts;
+        this.logger = Logger.getLogger(CollectionsAuthorizationInterceptor.class.getName());
 
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -38,6 +46,9 @@ public class CollectionsAuthorizationInterceptor implements Interceptor {
         final OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
 
         // Only log in debug mode to avoid leaking sensitive information.
+        final HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        okhttpbuilder.addInterceptor(httpLoggingInterceptor);
 
 
         okhttpbuilder.connectTimeout(30, TimeUnit.SECONDS);
@@ -60,41 +71,61 @@ public class CollectionsAuthorizationInterceptor implements Interceptor {
 
     }
 
-    /**
-     * this method is API implemetation specific
-     * might not work with other APIs
-     **/
-    public String getAuthorizationHeader(String email, String password) {
-        String credential = email + ":" + password;
-        return "Basic " + Base64.getEncoder().encodeToString(credential.getBytes());
+
+    private Request request(final Request initialRequest) {
+
+        this.logger.log(Level.INFO, "Using token >>>>>>>>>>>>>>>>> " + this.session.getToken());
+
+
+        return initialRequest.newBuilder()
+                //.header("Accept", "application/json")
+                .addHeader("Authorization", "Bearer " + this.session.getToken())
+                .addHeader("Ocp-Apim-Subscription-Key", this.opts.getCollectionPrimaryKey())
+                .addHeader("X-Target-Environment", this.opts.getTargetEnvironment())
+
+                .method(initialRequest.method(), initialRequest.body())
+                .build();
     }
 
+
     @Override
-    public Response intercept(Chain chain) throws IOException {
-        Response mainResponse = chain.proceed(chain.request());
+    public okhttp3.Response intercept(Chain chain) throws IOException {
+        okhttp3.Response mainResponse = chain.proceed(request(chain.request()));
         Request mainRequest = chain.request();
 
-        if (session.isLoggedIn()) {
-            // if response code is 401 or 403, 'mainRequest' has encountered authentication error
-            if (mainResponse.code() == 401 || mainResponse.code() == 403) {
-                String authKey = getAuthorizationHeader(session.getEmail(), session.getPassword());
-                // request to login API to get fresh token
-                // synchronously calling login API
-                retrofit2.Response<Authorization> loginResponse = apiService.loginAccount(authKey).execute();
 
-                if (loginResponse.isSuccessful()) {
-                    // login request succeed, new token generated
-                    Authorization authorization = loginResponse.body();
-                    // save the new token
-                    session.saveToken(authorization.getToken());
-                    // retry the 'mainRequest' which encountered an authentication error
-                    // add new token into 'mainRequest' header and request again
-                    Request.Builder builder = mainRequest.newBuilder().header("Authorization", session.getToken()).
-                            method(mainRequest.method(), mainRequest.body());
-                    mainResponse = chain.proceed(builder.build());
-                }
+        // if response code is 401 or 403, 'mainRequest' has encountered authentication error
+        if (mainResponse.code() == 401 || mainResponse.code() == 403) {
+
+
+            this.logger.log(Level.INFO, "<<<<<<<<<<<<<<<Getting Fresh Token");
+
+
+            String credentials = Credentials.basic(this.opts.getCollectionUserId(), this.opts.getCollectionApiSecret());
+            Response<AccessToken> loginResponse = apiService
+                    .getToken(credentials, this.opts.getCollectionPrimaryKey()).execute();
+
+            if (loginResponse.isSuccessful()) {
+                // login request succeed, new token generated
+                AccessToken token = loginResponse.body();
+                // save the new token
+                this.session.saveToken(token.getToken());
+                // retry the 'mainRequest' which encountered an authentication error
+                // add new token into 'mainRequest' header and request again
+                Request.Builder builder = mainRequest.newBuilder().addHeader("Authorization", "Bearer " + this.session.getToken())
+                        .addHeader("Ocp-Apim-Subscription-Key", this.opts.getCollectionPrimaryKey())
+                        .addHeader("X-Target-Environment", this.opts.getTargetEnvironment()).
+                                method(mainRequest.method(), mainRequest.body());
+                mainResponse = chain.proceed(builder.build());
             }
+        } else if (!mainResponse.isSuccessful()) {
+
+
+            throw new ApiException(mainResponse.body().string());
+
+
         }
+
 
         return mainResponse;
     }

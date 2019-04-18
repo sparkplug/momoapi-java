@@ -9,16 +9,17 @@ public interface CollectionsApiService {
 
     @POST("/collection/v1_0/requesttopay/")
     @FormUrlEncoded
-    Call<RequesttopayResponse> requestToPay(@Body RequestToPay body);
+    Call<RequesttopayResponse> requestToPay(@Body RequestToPay body, @Header("X-Reference-Id") String ref);
 
 
-    @POST("/collections/token/")
+    @POST("/collection/token/")
     @Headers("Content-Type: application/json")
-    Call<AccessToken> getToken(@Body LoginBody params);
+    Call<AccessToken> getToken(@Header("Authorization") String credentials, @Header("Ocp-Apim-Subscription-Key") String subscriptionKey);
 
     /**
      * Get Account Balance
      */
+    @Headers("Content-Type: application/json")
     @GET("/collection/v1_0/account/balance")
     Call<Balance> getBalance();
 

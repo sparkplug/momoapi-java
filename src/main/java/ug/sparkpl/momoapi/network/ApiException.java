@@ -1,20 +1,13 @@
 package ug.sparkpl.momoapi.network;
 
-import lombok.NonNull;
-import ug.sparkpl.momoapi.models.ErrorResponse;
-
 /**
- * An exception class wrapping an {@link ErrorResponse}.
+ * An exception class for the response.
  */
-public final class ApiException extends ResponseException {
-    private final ErrorResponse error;
+public final class ApiException extends RuntimeException {
 
-    public ApiException(final @NonNull ErrorResponse error, final @NonNull retrofit2.Response response) {
+
+    public ApiException(String response) {
         super(response);
-        this.error= error;
-    }
 
-    public @NonNull ErrorResponse errorResponse() {
-        return error;
     }
 }

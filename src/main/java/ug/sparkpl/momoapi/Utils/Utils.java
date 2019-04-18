@@ -1,15 +1,21 @@
 package ug.sparkpl.momoapi.Utils;
 
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import lombok.NonNull;
 import retrofit2.HttpException;
-import rx.functions.Func1;
+import retrofit2.Response;
+import ug.sparkpl.momoapi.models.MomoApiError;
 
 import javax.annotation.Nullable;
 
 
 public class Utils {
 
-    private Utils(){}
+    private Utils() {
+    }
 
     public static boolean isNull(final @Nullable Object object) {
         return object == null;
@@ -22,27 +28,19 @@ public class Utils {
     /**
      * Returns the first non-`null` value of its arguments.
      */
-    @NonNull public static <T> T coalesce(final @Nullable T value, final @NonNull T theDefault) {
+    @NonNull
+    public static <T> T coalesce(final @Nullable T value, final @NonNull T theDefault) {
         if (value != null) {
             return value;
         }
         return theDefault;
     }
 
-
-    /**
-     * Returns a function `T -> T` that coalesces values with `theDefault`.
-     */
-    @NonNull public static <T> Func1<T, T> coalesceWith(final @NonNull T theDefault) {
-        return (value) -> Utils.coalesce(value, theDefault);
-    }
-
-
-
     /**
      * Converts a {@link String} to a {@link Boolean}, or null if the boolean cannot be parsed.
      */
-    public static @Nullable Boolean toBoolean(final @Nullable String s) {
+    public static @Nullable
+    Boolean toBoolean(final @Nullable String s) {
         if (s != null) {
             return Boolean.parseBoolean(s);
         }
@@ -53,7 +51,8 @@ public class Utils {
     /**
      * Converts a {@link String} to an {@link Integer}, or null if the integer cannot be parsed.
      */
-    public static @Nullable Integer toInteger(final @Nullable String s) {
+    public static @Nullable
+    Integer toInteger(final @Nullable String s) {
         if (s != null) {
             try {
                 return Integer.parseInt(s);
@@ -68,7 +67,8 @@ public class Utils {
     /**
      * Converts an {@link Integer} to a {@link String}, can be null if the integer is also null.
      */
-    public static @Nullable String toString(final @Nullable Integer n) {
+    public static @Nullable
+    String toString(final @Nullable Integer n) {
         if (n != null) {
             return Integer.toString(n);
         }
@@ -79,7 +79,8 @@ public class Utils {
     /**
      * Converts a {@link Long} to a {@link String}, can be null if the long is also null.
      */
-    public static @Nullable String toString(final @Nullable Long n) {
+    public static @Nullable
+    String toString(final @Nullable Long n) {
         if (n != null) {
             return Long.toString(n);
         }
@@ -90,7 +91,8 @@ public class Utils {
     /**
      * Converts a {@link Float} to a {@link String}, can be null if the float is also null.
      */
-    public static @Nullable String toString(final @Nullable Float n) {
+    public static @Nullable
+    String toString(final @Nullable Float n) {
         if (n != null) {
             return Float.toString(n);
         }
@@ -101,7 +103,8 @@ public class Utils {
     /**
      * Converts a {@link Double} to a {@link String}, can be null if the double is also null.
      */
-    public static @Nullable String toString(final @Nullable Double n) {
+    public static @Nullable
+    String toString(final @Nullable Double n) {
         if (n != null) {
             return Double.toString(n);
         }
@@ -121,7 +124,8 @@ public class Utils {
      * Cast a `null`able value into a non-`null` value, and throw a `NullPointerException` if the value is `null`. Provide
      * a message for a better description of why you require this value to be non-`null`.
      */
-    public static @NonNull <T> T requireNonNull(final @Nullable T value, final @NonNull Class<T> klass) throws NullPointerException {
+    public static @NonNull
+    <T> T requireNonNull(final @Nullable T value, final @NonNull Class<T> klass) throws NullPointerException {
         return requireNonNull(value, klass.toString() + " required to be non-null.");
     }
 
@@ -129,13 +133,13 @@ public class Utils {
      * Cast a `null`able value into a non-`null` value, and throw a `NullPointerException` if the value is `null`. Provide
      * a message for a better description of why you require this value to be non-`null`.
      */
-    public static @NonNull <T> T requireNonNull(final @Nullable T value, final @NonNull String message) throws NullPointerException {
+    public static @NonNull
+    <T> T requireNonNull(final @Nullable T value, final @NonNull String message) throws NullPointerException {
         if (value == null) {
             throw new NullPointerException(message);
         }
         return value;
     }
-
 
     /**
      * Returns true if the Throwable is an instance of RetrofitError with an
@@ -144,6 +148,20 @@ public class Utils {
     public static boolean isHttpStatusCode(Throwable throwable, int statusCode) {
         return throwable instanceof HttpException
                 && ((HttpException) throwable).code() == statusCode;
+    }
+
+    public MomoApiError parseError(Response<JsonObject> response) {
+        Gson gson = new Gson();
+
+        MomoApiError error;
+
+        try {
+            error = gson.fromJson(response.body(), MomoApiError.class);
+        } catch (JsonSyntaxException e) {
+            return new MomoApiError();
+        }
+
+        return error;
     }
 }
 
