@@ -1,11 +1,15 @@
 package ug.sparkpl.momoapi.models;
 
-public class Payer {
-     private String partyIdType;
-     private String partyId;
+import com.google.gson.annotations.SerializedName;
 
-     public Payer(String partyId, String partyIdType){
-          this.partyId=partyId;
-          this.partyIdType=partyIdType;
-     }
+public class Payer {
+    @SerializedName("partyIdType")
+    private String partyIdType;
+    @SerializedName("partyId")
+    private String partyId;
+
+    public Payer(String partyId, String partyIdType) {
+        this.partyId = partyId;
+        this.partyIdType = partyIdType;
+    }
 }

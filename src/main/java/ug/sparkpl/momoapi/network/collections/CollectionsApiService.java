@@ -2,13 +2,16 @@ package ug.sparkpl.momoapi.network.collections;
 
 import retrofit2.Call;
 import retrofit2.http.*;
-import ug.sparkpl.momoapi.models.*;
+import ug.sparkpl.momoapi.models.AccessToken;
+import ug.sparkpl.momoapi.models.Balance;
+import ug.sparkpl.momoapi.models.RequestToPay;
+import ug.sparkpl.momoapi.models.RequesttopayResponse;
 
 public interface CollectionsApiService {
 
 
-    @POST("/collection/v1_0/requesttopay/")
-    @FormUrlEncoded
+    @POST("/collection/v1_0/requesttopay")
+    @Headers("Content-Type: application/json")
     Call<RequesttopayResponse> requestToPay(@Body RequestToPay body, @Header("X-Reference-Id") String ref);
 
 
@@ -24,7 +27,8 @@ public interface CollectionsApiService {
     Call<Balance> getBalance();
 
 
-    @GET("/collection/v1_0/requesttopay/{transaction_id/")
-    Call<User> approveReject(@Path("transaction_id") String option);
+    @GET("/collection/v1_0/requesttopay/{transaction_id}")
+    @Headers("Content-Type: application/json")
+    Call<RequesttopayResponse> getTransactionStatus(@Path("transaction_id") String transaction_id);
 
 }

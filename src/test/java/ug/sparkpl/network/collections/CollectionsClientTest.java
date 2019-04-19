@@ -1,12 +1,16 @@
 package ug.sparkpl.network.collections;
 
-public class CollectionsClientTest {
+import com.google.common.collect.ImmutableMap;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 
-    /*
+import java.util.Map;
+
+public class CollectionsClientTest {
 
 
     public void testGetListUserByGroup() throws Exception {
-        final MockWebServer server = mockWebServer();
+        final MockWebServer server = new MockWebServer();
 
         server.enqueue(new MockResponse()
                 .setBody(payloadFromResource("/admin-list-user-by-group.json"))
@@ -26,6 +30,8 @@ public class CollectionsClientTest {
             server.shutdown();
         }
     }
+
+    /*
 
 
     public void testGetListUserByGroupOnError() throws Exception {

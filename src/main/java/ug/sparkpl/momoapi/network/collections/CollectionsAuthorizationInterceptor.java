@@ -48,6 +48,7 @@ public class CollectionsAuthorizationInterceptor implements Interceptor {
         // Only log in debug mode to avoid leaking sensitive information.
         final HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
         okhttpbuilder.addInterceptor(httpLoggingInterceptor);
 
 
@@ -119,6 +120,8 @@ public class CollectionsAuthorizationInterceptor implements Interceptor {
                 mainResponse = chain.proceed(builder.build());
             }
         } else if (!mainResponse.isSuccessful()) {
+
+            this.logger.log(Level.INFO, "<<<<<<<<<<<<<<< ETETETET  " + mainResponse.code() + "  .." + mainResponse.body().string());
 
 
             throw new ApiException(mainResponse.body().string());
