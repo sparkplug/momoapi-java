@@ -1,10 +1,10 @@
 package ug.sparkpl.momoapi;
 
 
-import retrofit2.Response;
-import ug.sparkpl.momoapi.models.RequesttopayResponse;
+import ug.sparkpl.momoapi.models.Balance;
+import ug.sparkpl.momoapi.models.Transaction;
 import ug.sparkpl.momoapi.network.RequestOptions;
-import ug.sparkpl.momoapi.network.collections.CollectionsClient;
+import ug.sparkpl.momoapi.network.remittances.RemittancesClient;
 
 import java.io.IOException;
 
@@ -17,20 +17,31 @@ public class MomoApi {
     public static void main(String[] args) {
 
         RequestOptions opts = RequestOptions.builder().build();
-        CollectionsClient client = new CollectionsClient(opts);
+        RemittancesClient client = new RemittancesClient(opts);
 
 
         try {
-            String ref = client.requestToPay("256794631873", "456", "234", "dd", "rty", "EUR");
+            Balance bl = client.getBalance();
+
+            System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&");
+
+            System.out.println(bl.getBalance());
+
+            System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+            String ref = client.transfer("0782631853", "4560", "234567", "dd", "rty", "EUR");
 
 
-            System.out.println(ref);
+            System.out.println(ref + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-            Response<RequesttopayResponse> re = client.getTransactionStatus(ref).execute();
-            RequesttopayResponse b = re.body();
-            System.out.println(b.getStatus());
+            Transaction tr = client.getTransactionStatus(ref);
+
+
+            System.out.println(tr.getStatus());
+
 
         } catch (IOException e) {
+            System.out.println(e.toString());
 
         }
 

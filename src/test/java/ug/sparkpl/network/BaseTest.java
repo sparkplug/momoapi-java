@@ -6,6 +6,8 @@ import okhttp3.mockwebserver.MockWebServer;
 
 import java.io.IOException;
 
+import static org.jclouds.util.Strings2.toStringAndClose;
+
 public class BaseTest {
     public MockWebServer server;
 

@@ -72,6 +72,7 @@ dependencies {
     implementation("com.google.dagger:dagger:2.21")
     annotationProcessor("com.google.dagger:dagger-compiler:2.21")
 
+
     compile group: 'com.google.code.gson', name: 'gson', version: '2.3.1'
     compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.0'
 
@@ -89,6 +90,10 @@ dependencies {
     testCompile group: 'org.mockito', name: 'mockito-core', version: '2.22.0'
     testRuntime group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.12.1'
+    testCompile("org.apache.jclouds:jclouds-core:2.0.2:tests")
+    testCompile("org.apache.jclouds.driver:jclouds-slf4j:2.0.2")
+    testCompile('org.assertj:assertj-core:3.8.0')
+    compile "org.apache.jclouds:jclouds-core:2.0.2"
 }
 
 jar {

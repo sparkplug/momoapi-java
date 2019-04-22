@@ -2,18 +2,18 @@ package ug.sparkpl.momoapi.network.collections;
 
 import retrofit2.Call;
 import retrofit2.http.*;
-import ug.sparkpl.momoapi.models.AccessToken;
-import ug.sparkpl.momoapi.models.Balance;
-import ug.sparkpl.momoapi.models.RequestToPay;
-import ug.sparkpl.momoapi.models.RequesttopayResponse;
+import ug.sparkpl.momoapi.models.*;
 
 public interface CollectionsApiService {
 
 
+    @GET("/v1_0/accountholder/{accountHolderIdType}/{accountHolderId}/active")
+    @Headers("Content-Type: application/json")
+    Call<Account> isActive(@Path("accountHolderIdType") String accountHolderIdType, @Path("accountHolderId") String accountHolderId);
+
     @POST("/collection/v1_0/requesttopay")
     @Headers("Content-Type: application/json")
-    Call<RequesttopayResponse> requestToPay(@Body RequestToPay body, @Header("X-Reference-Id") String ref);
-
+    Call<Void> requestToPay(@Body RequestToPay body, @Header("X-Reference-Id") String ref);
 
     @POST("/collection/token/")
     @Headers("Content-Type: application/json")
@@ -26,9 +26,8 @@ public interface CollectionsApiService {
     @GET("/collection/v1_0/account/balance")
     Call<Balance> getBalance();
 
-
     @GET("/collection/v1_0/requesttopay/{transaction_id}")
     @Headers("Content-Type: application/json")
-    Call<RequesttopayResponse> getTransactionStatus(@Path("transaction_id") String transaction_id);
+    Call<Transaction> getTransactionStatus(@Path("transaction_id") String transaction_id);
 
 }

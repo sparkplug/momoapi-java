@@ -1,13 +1,13 @@
-package ug.sparkpl.momoapi.network.collections;
+package ug.sparkpl.momoapi.network.remittances;
 
 import java.util.prefs.Preferences;
 
-public class CollectionSession {
+public class RemittancesSession {
     String TOKEN_NAME = "TOKEN";
     private String token;
     private Preferences prefs;
 
-    public CollectionSession() {
+    public RemittancesSession() {
         this.prefs = Preferences.userRoot().node(this.getClass().getName());
     }
 
@@ -19,7 +19,7 @@ public class CollectionSession {
 
     public String getToken() {
         // return the token that was saved earlier
-        return prefs.get(TOKEN_NAME, "ddd");
+        return prefs.get(TOKEN_NAME, "");
     }
 
 
@@ -27,5 +27,3 @@ public class CollectionSession {
 
     }
 }
-
-

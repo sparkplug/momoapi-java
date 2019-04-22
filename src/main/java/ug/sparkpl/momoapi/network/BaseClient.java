@@ -14,7 +14,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Scheduler;
 import rx.schedulers.Schedulers;
 import ug.sparkpl.momoapi.Utils.DateTimeTypeConverter;
-import ug.sparkpl.momoapi.network.collections.ApiRequestInterceptor;
 import ug.sparkpl.momoapi.network.collections.CollectionsApiService;
 
 
@@ -67,18 +66,4 @@ class BaseClient {
     }
 
 
-    OkHttpClient provideOkHttpClient(final @NonNull ApiRequestInterceptor apiRequestInterceptor,
-                                     final @NonNull HttpLoggingInterceptor httpLoggingInterceptor) {
-
-        final OkHttpClient.Builder builder = new OkHttpClient.Builder();
-
-        // Only log in debug mode to avoid leaking sensitive information.
-
-        builder.addInterceptor(httpLoggingInterceptor);
-
-
-        return builder
-                .addInterceptor(apiRequestInterceptor)
-                .build();
-    }
 }

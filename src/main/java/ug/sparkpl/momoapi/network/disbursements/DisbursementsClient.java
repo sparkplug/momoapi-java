@@ -1,4 +1,4 @@
-package ug.sparkpl.momoapi.network.collections;
+package ug.sparkpl.momoapi.network.disbursements;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -14,34 +14,31 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 import ug.sparkpl.momoapi.Utils.DateTimeTypeConverter;
 import ug.sparkpl.momoapi.models.AccessToken;
 import ug.sparkpl.momoapi.models.Balance;
-import ug.sparkpl.momoapi.models.RequestToPay;
 import ug.sparkpl.momoapi.models.Transaction;
+import ug.sparkpl.momoapi.models.Transfer;
 import ug.sparkpl.momoapi.network.RequestOptions;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class CollectionsClient {
-
-
+public class DisbursementsClient {
     RequestOptions opts;
     Gson gson;
-    private CollectionSession session;
-    private CollectionsApiService apiService;
+    private DisbursementsSession session;
+    private DisbursementsApiService apiService;
     private OkHttpClient httpClient;
     private Retrofit retrofitClient;
-    private Retrofit client;
 
-
-    public CollectionsClient(RequestOptions opts) {
+    public DisbursementsClient(RequestOptions opts) {
         this.opts = opts;
         this.gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
                 .create();
 
-        this.session = new CollectionSession();
+        this.session = new DisbursementsSession();
 
         final HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
@@ -53,7 +50,7 @@ public class CollectionsClient {
         // Only log in debug mode to avoid leaking sensitive information.
 
 
-        okhttpbuilder.addInterceptor(new CollectionsAuthorizationInterceptor(this.session, this.opts));
+        okhttpbuilder.addInterceptor(new DisbursementsAuthorizationInterceptor(this.session, this.opts));
         okhttpbuilder.addInterceptor(httpLoggingInterceptor);
 
 
@@ -73,20 +70,18 @@ public class CollectionsClient {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
 
-        this.apiService = this.retrofitClient.create(CollectionsApiService.class);
+        this.apiService = this.retrofitClient.create(DisbursementsApiService.class);
 
 
     }
 
 
     public AccessToken getToken() throws IOException {
-        String credentials = Credentials.basic(this.opts.getCollectionUserId(), this.opts.getCollectionApiSecret());
+        String credentials = Credentials.basic(this.opts.getDisbursementUserId(), this.opts.getDisbursementApiSecret());
         Response<AccessToken> token = this.apiService
-                .getToken(credentials, this.opts.getCollectionPrimaryKey()).execute();
-
+                .getToken(credentials, this.opts.getDisbursementPrimaryKey()).execute();
         return token.body();
     }
-
 
     public Balance getBalance() throws IOException {
         Response<Balance> balance = this.apiService
@@ -103,13 +98,21 @@ public class CollectionsClient {
     }
 
 
-    public String requestToPay(String mobile, String amount, String external_id, String payee_note, String payer_message, String currency) throws IOException {
-        RequestToPay rBody = new RequestToPay(mobile, amount, external_id, payee_note, payer_message, currency);
+    public String transfer(String mobile, String amount, String external_id, String payee_note, String payer_message, String currency) throws IOException {
+        Transfer rBody = new Transfer(mobile, amount, external_id, payee_note, payer_message, currency);
         String ref = UUID.randomUUID().toString();
-        this.apiService.requestToPay(rBody, ref).execute();
+        this.apiService.transfer(rBody, ref).execute();
         return ref;
 
     }
 
+
+    public String transfer(HashMap<String, String> opts) throws IOException {
+        Transfer rBody = new Transfer(opts.get("mobile"), opts.get("amount"), opts.get("externalId"), opts.get("payeeNote"), opts.get("payerMessage"), opts.get("currency"));
+        String ref = UUID.randomUUID().toString();
+        this.apiService.transfer(rBody, ref).execute();
+        return ref;
+
+    }
 
 }

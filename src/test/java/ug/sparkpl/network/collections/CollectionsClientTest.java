@@ -1,10 +1,6 @@
 package ug.sparkpl.network.collections;
 
-import com.google.common.collect.ImmutableMap;
-import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-
-import java.util.Map;
 
 public class CollectionsClientTest {
 
@@ -12,7 +8,7 @@ public class CollectionsClientTest {
     public void testGetListUserByGroup() throws Exception {
         final MockWebServer server = new MockWebServer();
 
-        server.enqueue(new MockResponse()
+       /* server.enqueue(new MockResponse()
                 .setBody(payloadFromResource("/admin-list-user-by-group.json"))
                 .setResponseCode(200));
         try (final BitbucketApi baseApi = api(server.getUrl("/"))) {
@@ -29,7 +25,65 @@ public class CollectionsClientTest {
         } finally {
             server.shutdown();
         }
+
+
+
+
+
+
+          RequestOptions opts = RequestOptions.builder().build();
+        CollectionsClient client = new CollectionsClient(opts);
+
+
+        try {
+
+            System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+            String ref = client.requestToPay("256794631873", "456", "234", "dd", "rty", "EUR");
+
+
+            System.out.println(ref + ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
+            Transaction tr = client.getTransactionStatus(ref);
+
+
+            System.out.println(tr.getStatus());
+
+            Balance bl = client.getBalance();
+
+            System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&");
+
+            System.out.println(bl.getBalance());
+
+
+        } catch (IOException e) {
+            System.out.println(e.toString());
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        */
     }
+
+
+
 
     /*
 
