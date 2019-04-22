@@ -6,7 +6,7 @@ import ug.sparkpl.momoapi.models.*;
 
 public interface DisbursementsApiService {
 
-    @POST("/disbursement/v1_0/transfer/")
+    @POST("/disbursement/v1_0/transfer")
     @Headers("Content-Type: application/json")
     Call<Void> transfer(@Body Transfer body, @Header("X-Reference-Id") String ref);
 

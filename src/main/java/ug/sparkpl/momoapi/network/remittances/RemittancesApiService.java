@@ -11,7 +11,7 @@ public interface RemittancesApiService {
 
     @POST("/remittance/v1_0/transfer/")
     @Headers("Content-Type: application/json")
-    Call<Transaction> transfer(@Body Transfer body, @Header("X-Reference-Id") String ref);
+    Call<Void> transfer(@Body Transfer body, @Header("X-Reference-Id") String ref);
 
 
     @POST("/remittance/token/")

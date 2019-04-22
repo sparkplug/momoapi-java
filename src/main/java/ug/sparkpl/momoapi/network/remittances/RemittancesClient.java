@@ -29,7 +29,6 @@ public class RemittancesClient {
     private RemittancesApiService apiService;
     private OkHttpClient httpClient;
     private Retrofit retrofitClient;
-    private Retrofit client;
 
 
     public RemittancesClient(RequestOptions opts) {

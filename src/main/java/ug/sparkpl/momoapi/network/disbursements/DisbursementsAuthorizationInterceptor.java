@@ -23,13 +23,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 public class DisbursementsAuthorizationInterceptor implements Interceptor {
+
     Logger logger;
     private DisbursementsApiService apiService;
     private DisbursementsSession session;
     private RequestOptions opts;
 
     public DisbursementsAuthorizationInterceptor(DisbursementsSession session, RequestOptions opts) {
+
         this.session = session;
         this.opts = opts;
         this.logger = Logger.getLogger(DisbursementsAuthorizationInterceptor.class.getName());
@@ -87,7 +90,7 @@ public class DisbursementsAuthorizationInterceptor implements Interceptor {
 
 
     @Override
-    public okhttp3.Response intercept(Interceptor.Chain chain) throws IOException {
+    public okhttp3.Response intercept(Chain chain) throws IOException {
         okhttp3.Response mainResponse = chain.proceed(request(chain.request()));
         Request mainRequest = chain.request();
 
@@ -100,7 +103,7 @@ public class DisbursementsAuthorizationInterceptor implements Interceptor {
 
 
             String credentials = Credentials.basic(this.opts.getDisbursementUserId(), this.opts.getDisbursementApiSecret());
-            Response<AccessToken> loginResponse = apiService
+            Response<AccessToken> loginResponse = this.apiService
                     .getToken(credentials, this.opts.getDisbursementPrimaryKey()).execute();
 
             if (loginResponse.isSuccessful()) {

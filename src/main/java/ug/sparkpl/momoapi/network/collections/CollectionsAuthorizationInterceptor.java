@@ -32,7 +32,7 @@ public class CollectionsAuthorizationInterceptor implements Interceptor {
     private RequestOptions opts;
 
     public CollectionsAuthorizationInterceptor(CollectionSession session, RequestOptions opts) {
-        this.apiService = apiService;
+
         this.session = session;
         this.opts = opts;
         this.logger = Logger.getLogger(CollectionsAuthorizationInterceptor.class.getName());
@@ -103,7 +103,7 @@ public class CollectionsAuthorizationInterceptor implements Interceptor {
 
 
             String credentials = Credentials.basic(this.opts.getCollectionUserId(), this.opts.getCollectionApiSecret());
-            Response<AccessToken> loginResponse = apiService
+            Response<AccessToken> loginResponse = this.apiService
                     .getToken(credentials, this.opts.getCollectionPrimaryKey()).execute();
 
             if (loginResponse.isSuccessful()) {

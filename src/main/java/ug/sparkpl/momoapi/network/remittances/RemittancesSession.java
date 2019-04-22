@@ -3,7 +3,7 @@ package ug.sparkpl.momoapi.network.remittances;
 import java.util.prefs.Preferences;
 
 public class RemittancesSession {
-    String TOKEN_NAME = "TOKEN";
+    String TOKEN_NAME = "REMITTANCE_TOKEN";
     private String token;
     private Preferences prefs;
 

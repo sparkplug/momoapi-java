@@ -30,7 +30,7 @@ public class RemittancesAuthorizationInterceptor implements Interceptor {
     private RequestOptions opts;
 
     public RemittancesAuthorizationInterceptor(RemittancesSession session, RequestOptions opts) {
-        this.apiService = apiService;
+
         this.session = session;
         this.opts = opts;
         this.logger = Logger.getLogger(RemittancesAuthorizationInterceptor.class.getName());
@@ -88,7 +88,7 @@ public class RemittancesAuthorizationInterceptor implements Interceptor {
 
 
     @Override
-    public okhttp3.Response intercept(Interceptor.Chain chain) throws IOException {
+    public okhttp3.Response intercept(Chain chain) throws IOException {
         okhttp3.Response mainResponse = chain.proceed(request(chain.request()));
         Request mainRequest = chain.request();
 
@@ -101,7 +101,7 @@ public class RemittancesAuthorizationInterceptor implements Interceptor {
 
 
             String credentials = Credentials.basic(this.opts.getRemittanceUserId(), this.opts.getRemittanceApiSecret());
-            Response<AccessToken> loginResponse = apiService
+            Response<AccessToken> loginResponse = this.apiService
                     .getToken(credentials, this.opts.getRemittancePrimaryKey()).execute();
 
             if (loginResponse.isSuccessful()) {
