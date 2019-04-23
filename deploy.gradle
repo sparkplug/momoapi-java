@@ -1,126 +1,138 @@
-/*
- * Based on the example at Chris Banes's repository that allows signing
- * without manually creating a maven file.
- *
- * The original can be found at
- * https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle
- */
-
-apply plugin: 'maven'
+apply plugin: 'java'
+apply plugin: 'maven-publish'
 apply plugin: 'signing'
-apply plugin: 'io.codearte.nexus-staging'
 
-nexusStaging {
-    packageGroup = GROUP
+repositories {
+    mavenCentral()
 }
 
-def isReleaseBuild() {
-    return VERSION_NAME.contains("SNAPSHOT") == false
+
+task sourceJar(type: Jar) {
+    classifier "sources"
+    from sourceSets.main.allJava
 }
 
-def getReleaseRepositoryUrl() {
-    return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
-            : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier "javadoc"
+    from javadoc.destinationDir
 }
 
-def getSnapshotRepositoryUrl() {
-    return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL
-            : "https://oss.sonatype.org/content/repositories/snapshots/"
+artifacts {
+    archives jar
+    archives sourceJar
+    archives javadocJar
 }
 
-def getRepositoryUsername() {
-    return hasProperty('NEXUS_USERNAME') ? NEXUS_USERNAME : ""
+signing {
+    sign configurations.archives
 }
 
-def getRepositoryPassword() {
-    return hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : ""
-}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            customizePom(pom)
+            groupId 'ug.sparkpl'
+            artifactId 'mtnmomo-java'
+            version '1.0.0'
 
-afterEvaluate { project ->
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            from components.java
 
-                pom.groupId = GROUP
-                pom.artifactId = POM_ARTIFACT_ID
-                pom.version = VERSION_NAME
-
-                repository(url: getReleaseRepositoryUrl()) {
-                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
+            // create the sign pom artifact
+            pom.withXml {
+                def pomFile = file("${project.buildDir}/generated-pom.xml")
+                writeTo(pomFile)
+                def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+                artifact(pomAscFile) {
+                    classifier = null
+                    extension = 'pom.asc'
                 }
+            }
 
-                snapshotRepository(url: getSnapshotRepositoryUrl()) {
-                    authentication(userName: getRepositoryUsername(), password: getRepositoryPassword())
-                }
+            artifact(sourceJar) {
+                classifier = 'sources'
+            }
+            artifact(javadocJar) {
+                classifier = 'javadoc'
+            }
 
-                pom.project {
-                    name POM_NAME
-                    description POM_DESCRIPTION
-                    url POM_URL
-                    packaging POM_PACKAGING
-
-                    scm {
-                        url POM_SCM_URL
-                        connection POM_SCM_CONNECTION
-                        developerConnection POM_SCM_DEV_CONNECTION
+            // create the signed artifacts
+            project.tasks.signArchives.signatureFiles.each {
+                artifact(it) {
+                    def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+                    if (matcher.find()) {
+                        classifier = matcher.group(1)
+                    } else {
+                        classifier = null
                     }
-
-                    licenses {
-                        license {
-                            name POM_LICENCE_NAME
-                            url POM_LICENCE_URL
-                            distribution POM_LICENCE_DIST
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id POM_DEVELOPER_ID
-                            name POM_DEVELOPER_NAME
-                            email POM_DEVELOPER_EMAIL
-                        }
-                    }
-
-                    organization {
-                        name POM_DEVELOPER_NAME
-                        url POM_ORGANIZATION_URL
-                    }
+                    extension = 'jar.asc'
                 }
             }
         }
     }
-
-    signing {
-        required { isReleaseBuild() &&
-        (gradle.taskGraph.hasTask("uploadArchives") || gradle.taskGraph.hasTask("publish"))}
-        useGpgCmd()
-        sign configurations.archives
+    repositories {
+        maven {
+            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            credentials {
+                username sonatypeUsername
+                password sonatypePassword
+            }
+        }
     }
+}
 
-    tasks.withType(Sign) {
-        onlyIf { isReleaseBuild() && project.hasProperty('signing.gnupg.keyName') }
+def customizePom(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        // eliminate test-scoped dependencies (no need in maven central POMs)
+        root.dependencies.removeAll { dep ->
+            dep.scope == "test"
+        }
+
+        // add all items necessary for maven central publication
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+
+            description 'MTN MOMO Java Bindings'
+            name 'https://momodeveloper.mtn.com/ Java'
+            url 'https://github.com/sparkplug/momoapi-java'
+            organization {
+                name 'ug.sparkpl'
+                url 'https://sparkpl.ug'
+            }
+            issueManagement {
+                system 'GitHub'
+                url 'https://github.com/sparkplug/momoapi-java/issues'
+            }
+            licenses {
+                license {
+                    name 'The MIT License'
+                    url 'https://raw.githubusercontent.com/sparkplug/momoapi-java/master/LICENSE'
+                    distribution 'repo'
+                }
+            }
+            scm {
+                url 'https://github.com/sparkplug/momoapi-java'
+                connection 'scm:git@github.com/sparkplug/momoapi-java.git'
+                developerConnection 'scm:git:ssh://git@github.com:sparkplug/momoapi-java.git'
+            }
+            developers {
+                developer {
+                    name 'Sparkplug'
+                }
+            }
+        }
     }
+}
 
-    task makeJavadocs(type: Javadoc, dependsOn: delombok) {
-        source = delombok.outputDir
-        classpath = configurations.compile + configurations.annotationProcessor
-        failOnError = true
+model {
+    tasks.generatePomFileForMavenJavaPublication {
+        destination = file("$buildDir/generated-pom.xml")
     }
-
-    task makeJavadocsJar(type: Jar, dependsOn: makeJavadocs) {
-        classifier = 'javadoc'
-        from makeJavadocs.destinationDir
+    tasks.publishMavenJavaPublicationToMavenLocal {
+        dependsOn project.tasks.signArchives
     }
-
-    task sourcesJar(type: Jar, dependsOn: delombok) {
-        classifier = 'sources'
-        from delombok.outputDir
-    }
-
-    artifacts {
-        archives jar
-        archives sourcesJar
-        archives makeJavadocsJar
+    tasks.publishMavenJavaPublicationToMavenRepository {
+        dependsOn project.tasks.signArchives
     }
 }

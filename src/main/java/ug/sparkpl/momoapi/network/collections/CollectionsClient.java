@@ -19,6 +19,7 @@ import ug.sparkpl.momoapi.models.Transaction;
 import ug.sparkpl.momoapi.network.RequestOptions;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -105,6 +106,14 @@ public class CollectionsClient {
 
     public String requestToPay(String mobile, String amount, String external_id, String payee_note, String payer_message, String currency) throws IOException {
         RequestToPay rBody = new RequestToPay(mobile, amount, external_id, payee_note, payer_message, currency);
+        String ref = UUID.randomUUID().toString();
+        this.apiService.requestToPay(rBody, ref).execute();
+        return ref;
+
+    }
+
+    public String requestToPay(HashMap<String, String> opts) throws IOException {
+        RequestToPay rBody = new RequestToPay(opts.get("mobile"), opts.get("amount"), opts.get("external_id"), opts.get("payee_note"), opts.get("payer_message"), opts.get("currency"));
         String ref = UUID.randomUUID().toString();
         this.apiService.requestToPay(rBody, ref).execute();
         return ref;

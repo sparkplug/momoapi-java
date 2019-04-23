@@ -19,7 +19,7 @@ public class DisbursementsSession {
 
     public String getToken() {
         // return the token that was saved earlier
-        return prefs.get(TOKEN_NAME, "rando");
+        return prefs.get(TOKEN_NAME, "dummy");
     }
 
 

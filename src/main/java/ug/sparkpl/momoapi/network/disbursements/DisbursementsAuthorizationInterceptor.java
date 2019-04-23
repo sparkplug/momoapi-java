@@ -15,7 +15,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ug.sparkpl.momoapi.Utils.DateTimeTypeConverter;
 import ug.sparkpl.momoapi.models.AccessToken;
-import ug.sparkpl.momoapi.network.ApiException;
+import ug.sparkpl.momoapi.network.MomoApiException;
 import ug.sparkpl.momoapi.network.RequestOptions;
 
 import java.io.IOException;
@@ -124,7 +124,7 @@ public class DisbursementsAuthorizationInterceptor implements Interceptor {
             this.logger.log(Level.INFO, "<<<<<<<<<<<<<<< ETETETET  " + mainResponse.code() + "  .." + mainResponse.body().string());
 
 
-            throw new ApiException(mainResponse.body().string());
+            throw new MomoApiException(mainResponse.body().string());
 
 
         }

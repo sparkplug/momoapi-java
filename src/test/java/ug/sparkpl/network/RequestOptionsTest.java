@@ -15,7 +15,6 @@ public class RequestOptionsTest {
                 .setCollectionUserId("1234").build();
 
 
-        // only api keys and account should persist
         // assuming these are stable across a given stripe integration
         assertEquals("sec", opts.getCollectionApiSecret());
         assertEquals("123", opts.getCollectionPrimaryKey());

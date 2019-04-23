@@ -7,24 +7,39 @@ import lombok.EqualsAndHashCode;
 public class RequestOptions {
 
 
-    private String COLLECTION_USER_ID;
-    private String COLLECTION_API_SECRET;
-    private String COLLECTION_PRIMARY_KEY;
+    private final String COLLECTION_USER_ID;
+    private final String COLLECTION_API_SECRET;
+    private final String COLLECTION_PRIMARY_KEY;
 
-    private String REMITTANCE_PRIMARY_KEY;
-    private String REMITTANCE_USER_ID;
-    private String REMITTANCE_API_SECRET;
-
-
-    private String DISBURSEMENT_PRIMARY_KEY;
-    private String DISBURSEMENT_USER_ID;
-    private String DISBURSEMENT_API_SECRET;
-
-    private String BASE_URL = "https://ericssonbasicapi2.azure-api.net";
-    private String TARGET_ENVIRONMENT = "sandbox";
+    private final String REMITTANCE_PRIMARY_KEY;
+    private final String REMITTANCE_USER_ID;
+    private final String REMITTANCE_API_SECRET;
 
 
-    private RequestOptions() {
+    private final String DISBURSEMENT_PRIMARY_KEY;
+    private final String DISBURSEMENT_USER_ID;
+    private final String DISBURSEMENT_API_SECRET;
+
+    private final String BASE_URL;
+    private final String TARGET_ENVIRONMENT;
+
+
+    public RequestOptions(String COLLECTION_API_SECRET, String COLLECTION_PRIMARY_KEY, String COLLECTION_USER_ID, String REMITTANCE_USER_ID, String REMITTANCE_PRIMARY_KEY, String REMITTANCE_API_SECRET, String DISBURSEMENT_API_SECRET, String DISBURSEMENT_PRIMARY_KEY, String DISBURSEMENT_USER_ID, String BASE_URL, String TARGET_ENVIRONMENT) {
+
+        this.COLLECTION_API_SECRET = COLLECTION_API_SECRET;
+        this.COLLECTION_PRIMARY_KEY = COLLECTION_PRIMARY_KEY;
+        this.COLLECTION_USER_ID = COLLECTION_USER_ID;
+
+        this.REMITTANCE_USER_ID = REMITTANCE_USER_ID;
+        this.REMITTANCE_PRIMARY_KEY = REMITTANCE_PRIMARY_KEY;
+        this.REMITTANCE_API_SECRET = REMITTANCE_API_SECRET;
+
+        this.DISBURSEMENT_API_SECRET = DISBURSEMENT_API_SECRET;
+        this.DISBURSEMENT_PRIMARY_KEY = DISBURSEMENT_PRIMARY_KEY;
+        this.DISBURSEMENT_USER_ID = DISBURSEMENT_USER_ID;
+        this.BASE_URL = BASE_URL;
+        this.TARGET_ENVIRONMENT = TARGET_ENVIRONMENT;
+
 
     }
 
@@ -51,7 +66,7 @@ public class RequestOptions {
 
 
     public String getRemittanceUserId() {
-        return this.REMITTANCE_USER_ID;
+        return REMITTANCE_USER_ID;
     }
 
     public String getRemittanceApiSecret() {
@@ -81,7 +96,7 @@ public class RequestOptions {
     }
 
 
-    public static final class Builder {
+    public static class Builder {
 
         private String COLLECTION_USER_ID;
         private String COLLECTION_API_SECRET;
@@ -116,6 +131,7 @@ public class RequestOptions {
             this.DISBURSEMENT_PRIMARY_KEY = System.getenv("DISBURSEMENT_PRIMARY_KEY");
             this.DISBURSEMENT_USER_ID = System.getenv("DISBURSEMENT_USER_ID");
             this.DISBURSEMENT_API_SECRET = System.getenv("DISBURSEMENT_API_SECRET");
+
         }
 
         private static String normalizeKey(String key) {
@@ -178,30 +194,33 @@ public class RequestOptions {
             return this;
         }
 
+        public Builder setCurrency(String currency) {
+            this.CURRENCY = CURRENCY;
+            return this;
+        }
+
 
         public RequestOptions build() {
-            RequestOptions opts = new RequestOptions();
-            opts.COLLECTION_API_SECRET = this.COLLECTION_API_SECRET;
-            opts.COLLECTION_PRIMARY_KEY = this.COLLECTION_PRIMARY_KEY;
-            opts.COLLECTION_USER_ID = this.COLLECTION_USER_ID;
+            return new RequestOptions(
+                    this.COLLECTION_API_SECRET,
+                    this.COLLECTION_PRIMARY_KEY,
+                    this.COLLECTION_USER_ID,
 
-            opts.REMITTANCE_USER_ID = this.REMITTANCE_USER_ID;
-            opts.REMITTANCE_PRIMARY_KEY = this.REMITTANCE_PRIMARY_KEY;
-            opts.REMITTANCE_API_SECRET = this.REMITTANCE_API_SECRET;
+                    this.REMITTANCE_USER_ID,
+                    this.REMITTANCE_PRIMARY_KEY,
+                    this.REMITTANCE_API_SECRET,
 
-            opts.DISBURSEMENT_API_SECRET = this.DISBURSEMENT_API_SECRET;
-            opts.DISBURSEMENT_PRIMARY_KEY = this.DISBURSEMENT_PRIMARY_KEY;
-            opts.DISBURSEMENT_USER_ID = this.DISBURSEMENT_USER_ID;
-            opts.BASE_URL = this.BASE_URL;
-            opts.TARGET_ENVIRONMENT = this.TARGET_ENVIRONMENT;
-
-            return opts;
+                    this.DISBURSEMENT_API_SECRET,
+                    this.DISBURSEMENT_PRIMARY_KEY,
+                    this.DISBURSEMENT_USER_ID,
+                    this.BASE_URL,
+                    this.TARGET_ENVIRONMENT
+            );
 
         }
 
 
     }
-
 
     public static class InvalidRequestOptionsException extends RuntimeException {
         private static final long serialVersionUID = 1L;

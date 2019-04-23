@@ -19,7 +19,7 @@ public class RemittancesSession {
 
     public String getToken() {
         // return the token that was saved earlier
-        return prefs.get(TOKEN_NAME, "");
+        return prefs.get(TOKEN_NAME, "dummy");
     }
 
 

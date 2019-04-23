@@ -19,6 +19,7 @@ import ug.sparkpl.momoapi.models.Transfer;
 import ug.sparkpl.momoapi.network.RequestOptions;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -101,6 +102,14 @@ public class RemittancesClient {
 
     public String transfer(String mobile, String amount, String external_id, String payee_note, String payer_message, String currency) throws IOException {
         Transfer rBody = new Transfer(mobile, amount, external_id, payee_note, payer_message, currency);
+        String ref = UUID.randomUUID().toString();
+        this.apiService.transfer(rBody, ref).execute();
+        return ref;
+
+    }
+
+    public String transfer(HashMap<String, String> opts) throws IOException {
+        Transfer rBody = new Transfer(opts.get("mobile"), opts.get("amount"), opts.get("externalId"), opts.get("payeeNote"), opts.get("payerMessage"), opts.get("currency"));
         String ref = UUID.randomUUID().toString();
         this.apiService.transfer(rBody, ref).execute();
         return ref;

@@ -19,7 +19,7 @@ public class CollectionSession {
 
     public String getToken() {
         // return the token that was saved earlier
-        return prefs.get(TOKEN_NAME, "ddd");
+        return prefs.get(TOKEN_NAME, "dummy");
     }
 
 
