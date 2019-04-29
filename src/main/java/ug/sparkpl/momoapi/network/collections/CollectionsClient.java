@@ -113,7 +113,7 @@ public class CollectionsClient {
     }
 
     public String requestToPay(HashMap<String, String> opts) throws IOException {
-        RequestToPay rBody = new RequestToPay(opts.get("mobile"), opts.get("amount"), opts.get("external_id"), opts.get("payee_note"), opts.get("payer_message"), opts.get("currency"));
+        RequestToPay rBody = new RequestToPay(opts.get("mobile"), opts.get("amount"), opts.get("externalId"), opts.get("payeeNote"), opts.get("payerMessage"), "EUR");
         String ref = UUID.randomUUID().toString();
         this.apiService.requestToPay(rBody, ref).execute();
         return ref;

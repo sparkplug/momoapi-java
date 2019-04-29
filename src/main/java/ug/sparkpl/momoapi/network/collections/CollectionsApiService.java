@@ -30,4 +30,14 @@ public interface CollectionsApiService {
     @Headers("Content-Type: application/json")
     Call<Transaction> getTransactionStatus(@Path("transaction_id") String transaction_id);
 
+
+    @POST("https://ericssonbasicapi2.azure-api.net/v1_0/apiuser")
+    @Headers("Content-Type: application/json")
+    Call<Void> provisonUser(@Header("Ocp-Apim-Subscription-Key") String key, @Header("X-Reference-Id") String token, @Body NewUser body);
+
+
+    @POST("https://ericssonbasicapi2.azure-api.net/v1_0/apiuser/{token}/apikey")
+    @Headers("Content-Type: application/json")
+    Call<User> getUser(@Path("token") String token, @Header("Ocp-Apim-Subscription-Key") String key);
+
 }

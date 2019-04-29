@@ -79,6 +79,10 @@ dependencies {
     compile group: 'com.google.code.gson', name: 'gson', version: '2.3.1'
     compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.0'
 
+    compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
+
+    compile group: 'org.gradle', name: 'api', version: '1.0'
+
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:26.0-jre'
@@ -153,7 +157,8 @@ test {
     }
 }
 
-task testRun(type: JavaExec) {
+task provisionUser(type: JavaExec) {
+    standardInput = System.in
     classpath sourceSets.main.runtimeClasspath
     main = "ug.sparkpl.momoapi.MomoApi"
 

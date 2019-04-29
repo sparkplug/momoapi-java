@@ -1,5 +1,6 @@
 package ug.sparkpl.momoapi.models;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 public class Transaction {
@@ -35,6 +36,13 @@ public class Transaction {
         return this.externalId;
     }
 
+    @Override
+    public String toString() {
+        Gson gson = new Gson();
+
+        return gson.toJson(this);
+    }
+
     class Reason {
 
         private String code;
@@ -42,6 +50,4 @@ public class Transaction {
 
 
     }
-
-
 }
