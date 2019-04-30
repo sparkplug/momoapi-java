@@ -13,57 +13,57 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Scheduler;
 import rx.schedulers.Schedulers;
-import ug.sparkpl.momoapi.Utils.DateTimeTypeConverter;
 import ug.sparkpl.momoapi.network.collections.CollectionsApiService;
+import ug.sparkpl.momoapi.utils.DateTimeTypeConverter;
 
 
 class BaseClient {
 
-    BaseClient() {
+  BaseClient() {
 
-    }
-
-
-    Scheduler getScheduler() {
-        return Schedulers.computation();
-    }
+  }
 
 
-    Gson getGson() {
-        return new GsonBuilder()
-                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-                .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
-                .create();
-    }
+  Scheduler getScheduler() {
+    return Schedulers.computation();
+  }
 
 
-    Retrofit createRetrofit(final @NonNull HttpUrl apiEndpoint, final @NonNull Gson gson, final @NonNull OkHttpClient okHttpClient) {
-        return new Retrofit.Builder()
-                .client(okHttpClient)
-                .baseUrl(apiEndpoint)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-    }
+  Gson getGson() {
+    return new GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
+            .create();
+  }
 
 
-    HttpLoggingInterceptor getHttpLoggingInterceptor() {
-        final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        return interceptor;
-    }
+  Retrofit createRetrofit(final @NonNull HttpUrl apiEndpoint, final @NonNull Gson gson, final @NonNull OkHttpClient okHttpClient) {
+    return new Retrofit.Builder()
+            .client(okHttpClient)
+            .baseUrl(apiEndpoint)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+            .build();
+  }
 
 
-    CollectionsApiService provideCollectionsApiService(final @NonNull Retrofit apiRetrofit) {
-        return apiRetrofit.create(CollectionsApiService.class);
-    }
+  HttpLoggingInterceptor getHttpLoggingInterceptor() {
+    final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+    interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+    return interceptor;
+  }
 
 
-    Retrofit getApiRetrofit(final @NonNull HttpUrl apiEndpoint,
-                            final @NonNull Gson gson,
-                            final @NonNull OkHttpClient okHttpClient) {
-        return createRetrofit(apiEndpoint, gson, okHttpClient);
-    }
+  CollectionsApiService provideCollectionsApiService(final @NonNull Retrofit apiRetrofit) {
+    return apiRetrofit.create(CollectionsApiService.class);
+  }
+
+
+  Retrofit getApiRetrofit(final @NonNull HttpUrl apiEndpoint,
+                          final @NonNull Gson gson,
+                          final @NonNull OkHttpClient okHttpClient) {
+    return createRetrofit(apiEndpoint, gson, okHttpClient);
+  }
 
 
 }

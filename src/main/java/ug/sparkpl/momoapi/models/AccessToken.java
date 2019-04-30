@@ -1,17 +1,36 @@
 package ug.sparkpl.momoapi.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class AccessToken {
-    private String access_token;
-    private String token_type;
-    private Integer expires_in;
 
-    public AccessToken(String access_token, String token_type, Integer expires_in) {
-        this.access_token = access_token;
-        this.token_type = token_type;
-        this.expires_in = expires_in;
-    }
+  @SerializedName("access_token")
+  private String accessToken;
+  @SerializedName("token_type")
+  private String tokenType;
+  @SerializedName("expiresIn")
+  private Integer expires_in;
 
-    public String getToken() {
-        return this.access_token;
-    }
+
+  /**
+   * AccessToken.
+   *
+   * @param accessToken String
+   * @param tokenType   String
+   * @param expiresIn   String
+   */
+  public AccessToken(String accessToken, String tokenType, Integer expiresIn) {
+    this.accessToken = accessToken;
+    this.tokenType = tokenType;
+    this.expires_in = expiresIn;
+  }
+
+  /**
+   * Get Access Token.
+   *
+   * @return access Token
+   */
+  public String getToken() {
+    return this.accessToken;
+  }
 }

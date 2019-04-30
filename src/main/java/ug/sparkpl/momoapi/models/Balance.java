@@ -3,20 +3,32 @@ package ug.sparkpl.momoapi.models;
 import com.google.gson.annotations.SerializedName;
 
 public class Balance {
-    String description;
+  String description;
 
-    @SerializedName("availableBalance")
-    String availableBalance;
+  @SerializedName("availableBalance")
+  String availableBalance;
 
-    String currency;
+  String currency;
 
-    public Balance(String description, String availableBalance, String currency) {
-        this.description = description;
-        this.currency = currency;
-        this.availableBalance = availableBalance;
-    }
+  /**
+   * The available balance of the account.
+   *
+   * @param description      String
+   * @param availableBalance String The available balance of the account
+   * @param currency         String ISO4217 Currency
+   */
+  public Balance(String description, String availableBalance, String currency) {
+    this.description = description;
+    this.currency = currency;
+    this.availableBalance = availableBalance;
+  }
 
-    public String getBalance() {
-        return this.availableBalance;
-    }
+  /**
+   * Get Available Balance.
+   *
+   * @return String available Balances
+   */
+  public String getBalance() {
+    return this.availableBalance;
+  }
 }

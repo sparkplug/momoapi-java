@@ -1,10 +1,10 @@
 package ug.sparkpl.momoapi;
 
-public class ImproperlyConfiguredException extends Exception  {
+public class ImproperlyConfiguredException extends Exception {
+  public ImproperlyConfiguredException(String errorMessage) {
 
-    public ImproperlyConfiguredException(String errorMessage) {
-        super(errorMessage);
-    }
+    super(errorMessage);
+  }
 }
 
 

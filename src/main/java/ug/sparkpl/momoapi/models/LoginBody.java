@@ -1,11 +1,21 @@
 package ug.sparkpl.momoapi.models;
 
-public class LoginBody {
-    private String user_id;
-    private String api_key;
+import com.google.gson.annotations.SerializedName;
 
-    public LoginBody(String user_id, String api_key) {
-        this.user_id = user_id;
-        this.api_key = api_key;
-    }
+public class LoginBody {
+  @SerializedName("user_id")
+  private String userId;
+  @SerializedName("api_key")
+  private String apiKey;
+
+  /**
+   * LoginBody.
+   *
+   * @param userId String
+   * @param apiKey String
+   */
+  public LoginBody(String userId, String apiKey) {
+    this.userId = userId;
+    this.apiKey = apiKey;
+  }
 }
