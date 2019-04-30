@@ -108,7 +108,7 @@ public class DisbursementsClient {
 
 
     public String transfer(HashMap<String, String> opts) throws IOException {
-        Transfer rBody = new Transfer(opts.get("mobile"), opts.get("amount"), opts.get("externalId"), opts.get("payeeNote"), opts.get("payerMessage"), opts.get("currency"));
+        Transfer rBody = new Transfer(opts.get("mobile"), opts.get("amount"), opts.get("externalId"), opts.get("payeeNote"), opts.get("payerMessage"), this.opts.getCurrency());
         String ref = UUID.randomUUID().toString();
         this.apiService.transfer(rBody, ref).execute();
         return ref;

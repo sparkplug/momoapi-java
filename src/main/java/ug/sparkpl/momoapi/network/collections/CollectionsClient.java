@@ -96,7 +96,7 @@ public class CollectionsClient {
 
     }
 
-    public Transaction getTransactionStatus(String ref) throws IOException {
+    public Transaction getTransaction(String ref) throws IOException {
         Response<Transaction> transaction = this.apiService
                 .getTransactionStatus(ref).execute();
         return transaction.body();
@@ -113,7 +113,7 @@ public class CollectionsClient {
     }
 
     public String requestToPay(HashMap<String, String> opts) throws IOException {
-        RequestToPay rBody = new RequestToPay(opts.get("mobile"), opts.get("amount"), opts.get("externalId"), opts.get("payeeNote"), opts.get("payerMessage"), "EUR");
+        RequestToPay rBody = new RequestToPay(opts.get("mobile"), opts.get("amount"), opts.get("externalId"), opts.get("payeeNote"), opts.get("payerMessage"), this.opts.getCurrency());
         String ref = UUID.randomUUID().toString();
         this.apiService.requestToPay(rBody, ref).execute();
         return ref;

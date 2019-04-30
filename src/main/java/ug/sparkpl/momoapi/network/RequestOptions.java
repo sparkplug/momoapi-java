@@ -22,9 +22,10 @@ public class RequestOptions {
 
     private final String BASE_URL;
     private final String TARGET_ENVIRONMENT;
+    private final String CURRENCY;
 
 
-    public RequestOptions(String COLLECTION_API_SECRET, String COLLECTION_PRIMARY_KEY, String COLLECTION_USER_ID, String REMITTANCE_USER_ID, String REMITTANCE_PRIMARY_KEY, String REMITTANCE_API_SECRET, String DISBURSEMENT_API_SECRET, String DISBURSEMENT_PRIMARY_KEY, String DISBURSEMENT_USER_ID, String BASE_URL, String TARGET_ENVIRONMENT) {
+    public RequestOptions(String COLLECTION_API_SECRET, String COLLECTION_PRIMARY_KEY, String COLLECTION_USER_ID, String REMITTANCE_USER_ID, String REMITTANCE_PRIMARY_KEY, String REMITTANCE_API_SECRET, String DISBURSEMENT_API_SECRET, String DISBURSEMENT_PRIMARY_KEY, String DISBURSEMENT_USER_ID, String BASE_URL, String TARGET_ENVIRONMENT, String CURRENCY) {
 
         this.COLLECTION_API_SECRET = COLLECTION_API_SECRET;
         this.COLLECTION_PRIMARY_KEY = COLLECTION_PRIMARY_KEY;
@@ -39,6 +40,7 @@ public class RequestOptions {
         this.DISBURSEMENT_USER_ID = DISBURSEMENT_USER_ID;
         this.BASE_URL = BASE_URL;
         this.TARGET_ENVIRONMENT = TARGET_ENVIRONMENT;
+        this.CURRENCY = CURRENCY;
 
 
     }
@@ -93,6 +95,10 @@ public class RequestOptions {
 
     public String getTargetEnvironment() {
         return this.TARGET_ENVIRONMENT;
+    }
+
+    public String getCurrency() {
+        return this.CURRENCY;
     }
 
 
@@ -199,6 +205,11 @@ public class RequestOptions {
             return this;
         }
 
+        public Builder setTargetEnvironment(String environment) {
+            this.TARGET_ENVIRONMENT = environment;
+            return this;
+        }
+
 
         public RequestOptions build() {
             return new RequestOptions(
@@ -214,7 +225,8 @@ public class RequestOptions {
                     this.DISBURSEMENT_PRIMARY_KEY,
                     this.DISBURSEMENT_USER_ID,
                     this.BASE_URL,
-                    this.TARGET_ENVIRONMENT
+                    this.TARGET_ENVIRONMENT,
+                    this.CURRENCY
             );
 
         }
