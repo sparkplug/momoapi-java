@@ -10,28 +10,21 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import lombok.NonNull;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Scheduler;
-import rx.schedulers.Schedulers;
 
 
 class BaseClient {
 
-  BaseClient() {
 
-  }
-
-
-  Scheduler getScheduler() {
-    return Schedulers.computation();
-  }
-
-
+  /**
+   * getGson.
+   *
+   * @return Gson
+   */
   Gson getGson() {
     return new GsonBuilder()
         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -40,7 +33,15 @@ class BaseClient {
   }
 
 
-  Retrofit createRetrofit(final @NonNull HttpUrl apiEndpoint, final @NonNull Gson gson,
+  /**
+   * create Retrofit.
+   *
+   * @param apiEndpoint  String
+   * @param gson         Gson
+   * @param okHttpClient OkHttpClient
+   * @return Retrofit
+   */
+  Retrofit createRetrofit(final String apiEndpoint, final Gson gson,
                           final @NonNull OkHttpClient okHttpClient) {
     return new Retrofit.Builder()
         .client(okHttpClient)
@@ -51,6 +52,11 @@ class BaseClient {
   }
 
 
+  /**
+   * get Http Logging Interceptor.
+   *
+   * @return HttpLoggingInterceptor
+   */
   HttpLoggingInterceptor getHttpLoggingInterceptor() {
     final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
     interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -58,12 +64,26 @@ class BaseClient {
   }
 
 
+  /**
+   * get collections Api Service.
+   *
+   * @param apiRetrofit Retrofit.
+   * @return CollectionsApiService
+   */
   CollectionsApiService provideCollectionsApiService(final @NonNull Retrofit apiRetrofit) {
     return apiRetrofit.create(CollectionsApiService.class);
   }
 
 
-  Retrofit getApiRetrofit(final @NonNull HttpUrl apiEndpoint,
+  /**
+   * Get Api Retrofit.
+   *
+   * @param apiEndpoint  String
+   * @param gson         Gson
+   * @param okHttpClient OkHttpClient
+   * @return Retrofit
+   */
+  Retrofit getApiRetrofit(final @NonNull String apiEndpoint,
                           final @NonNull Gson gson,
                           final @NonNull OkHttpClient okHttpClient) {
     return createRetrofit(apiEndpoint, gson, okHttpClient);

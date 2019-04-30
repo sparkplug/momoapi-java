@@ -1,16 +1,10 @@
 package ug.sparkpl.momoapi.network.remittances;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import okhttp3.Credentials;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import org.joda.time.DateTime;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
 import ug.sparkpl.momoapi.models.AccessToken;
 import ug.sparkpl.momoapi.models.Balance;
 import ug.sparkpl.momoapi.models.Transaction;
@@ -18,10 +12,19 @@ import ug.sparkpl.momoapi.models.Transfer;
 import ug.sparkpl.momoapi.network.RequestOptions;
 import ug.sparkpl.momoapi.utils.DateTimeTypeConverter;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+import org.joda.time.DateTime;
+
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import okhttp3.Credentials;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RemittancesClient {
   RequestOptions opts;
@@ -32,12 +35,15 @@ public class RemittancesClient {
   private Retrofit retrofitClient;
 
 
+  /**
+   * @param opts
+   */
   public RemittancesClient(RequestOptions opts) {
     this.opts = opts;
     this.gson = new GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
-            .create();
+        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+        .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
+        .create();
 
     this.session = new RemittancesSession();
 
@@ -61,15 +67,15 @@ public class RemittancesClient {
 
 
     this.httpClient = okhttpbuilder
-            .build();
+        .build();
 
 
     this.retrofitClient = new Retrofit.Builder()
-            .client(this.httpClient)
-            .baseUrl(opts.getBaseUrl())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build();
+        .client(this.httpClient)
+        .baseUrl(opts.getBaseUrl())
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .addConverterFactory(ScalarsConverterFactory.create())
+        .build();
 
     this.apiService = this.retrofitClient.create(RemittancesApiService.class);
 
@@ -77,39 +83,78 @@ public class RemittancesClient {
   }
 
 
+  /**
+   * @return
+   * @throws IOException
+   */
   public AccessToken getToken() throws IOException {
-    String credentials = Credentials.basic(this.opts.getRemittanceUserId(), this.opts.getRemittanceApiSecret());
+    String credentials = Credentials.basic(this.opts.getRemittanceUserId(),
+        this.opts.getRemittanceApiSecret());
     Response<AccessToken> token = this.apiService
-            .getToken(credentials, this.opts.getRemittancePrimaryKey()).execute();
+        .getToken(credentials, this.opts.getRemittancePrimaryKey()).execute();
     return token.body();
   }
 
 
+  /**
+   * @return
+   * @throws IOException
+   */
   public Balance getBalance() throws IOException {
     Response<Balance> balance = this.apiService
-            .getBalance().execute();
+        .getBalance().execute();
     return balance.body();
 
   }
 
+  /**
+   * @param ref
+   * @return
+   * @throws IOException
+   */
   public Transaction getTransactionStatus(String ref) throws IOException {
     Response<Transaction> transaction = this.apiService
-            .getTransactionStatus(ref).execute();
+        .getTransactionStatus(ref).execute();
     return transaction.body();
 
   }
 
 
-  public String transfer(String mobile, String amount, String external_id, String payee_note, String payer_message, String currency) throws IOException {
-    Transfer rBody = new Transfer(mobile, amount, external_id, payee_note, payer_message, currency);
+  /**
+   * @param mobile
+   * @param amount
+   * @param externalId
+   * @param payeeNote
+   * @param payerMessage
+   * @param currency
+   * @return
+   * @throws IOException
+   */
+  public String transfer(String mobile, String amount,
+                         String externalId,
+                         String payeeNote,
+                         String payerMessage,
+                         String currency) throws IOException {
+    Transfer rBody = new Transfer(mobile, amount, externalId,
+        payeeNote, payerMessage, currency);
     String ref = UUID.randomUUID().toString();
     this.apiService.transfer(rBody, ref).execute();
     return ref;
 
   }
 
+  /**
+   * transfer.
+   *
+   * @param opts String
+   * @return String
+   * @throws IOException when there is a network error
+   */
   public String transfer(HashMap<String, String> opts) throws IOException {
-    Transfer rBody = new Transfer(opts.get("mobile"), opts.get("amount"), opts.get("externalId"), opts.get("payeeNote"), opts.get("payerMessage"), opts.get("currency"));
+    Transfer rBody = new Transfer(opts.get("mobile"),
+        opts.get("amount"), opts.get("externalId"),
+        opts.get("payeeNote"), opts.get("payerMessage"),
+        opts.get("currency"));
     String ref = UUID.randomUUID().toString();
     this.apiService.transfer(rBody, ref).execute();
     return ref;

@@ -14,6 +14,11 @@ public class ResponseException extends RuntimeException {
     this.response = response;
   }
 
+  /**
+   * response.
+   *
+   * @return
+   */
   public Response response() {
     return response;
   }

@@ -1,16 +1,10 @@
 package ug.sparkpl.momoapi.network.collections;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import okhttp3.Credentials;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import org.joda.time.DateTime;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
 import ug.sparkpl.momoapi.models.AccessToken;
 import ug.sparkpl.momoapi.models.Balance;
 import ug.sparkpl.momoapi.models.RequestToPay;
@@ -18,10 +12,19 @@ import ug.sparkpl.momoapi.models.Transaction;
 import ug.sparkpl.momoapi.network.RequestOptions;
 import ug.sparkpl.momoapi.utils.DateTimeTypeConverter;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+import org.joda.time.DateTime;
+
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import okhttp3.Credentials;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class CollectionsClient {
 
@@ -35,12 +38,17 @@ public class CollectionsClient {
   private Retrofit client;
 
 
+  /**
+   * CollectionsClient.
+   *
+   * @param opts RequestOptions
+   */
   public CollectionsClient(RequestOptions opts) {
     this.opts = opts;
     this.gson = new GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
-            .create();
+        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+        .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
+        .create();
 
     this.session = new CollectionSession();
 
@@ -64,15 +72,15 @@ public class CollectionsClient {
 
 
     this.httpClient = okhttpbuilder
-            .build();
+        .build();
 
 
     this.retrofitClient = new Retrofit.Builder()
-            .client(this.httpClient)
-            .baseUrl(opts.getBaseUrl())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build();
+        .client(this.httpClient)
+        .baseUrl(opts.getBaseUrl())
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .addConverterFactory(ScalarsConverterFactory.create())
+        .build();
 
     this.apiService = this.retrofitClient.create(CollectionsApiService.class);
 
@@ -80,42 +88,85 @@ public class CollectionsClient {
   }
 
 
+  /**
+   * get access Token.
+   *
+   * @return AccessToken
+   * @throws IOException when there is a network error
+   */
   public AccessToken getToken() throws IOException {
-    String credentials = Credentials.basic(this.opts.getCollectionUserId(), this.opts.getCollectionApiSecret());
+    String credentials = Credentials.basic(this.opts.getCollectionUserId(),
+        this.opts.getCollectionApiSecret());
     Response<AccessToken> token = this.apiService
-            .getToken(credentials, this.opts.getCollectionPrimaryKey()).execute();
+        .getToken(credentials, this.opts.getCollectionPrimaryKey()).execute();
 
     return token.body();
   }
 
 
+  /**
+   * get Account Balance.
+   *
+   * @return Balance
+   * @throws IOException when there is a network error
+   */
   public Balance getBalance() throws IOException {
     Response<Balance> balance = this.apiService
-            .getBalance().execute();
+        .getBalance().execute();
     return balance.body();
 
   }
 
+  /**
+   * get Transaction.
+   *
+   * @param ref String
+   * @return Transaction
+   * @throws IOException when there is a network error
+   */
   public Transaction getTransaction(String ref) throws IOException {
     Response<Transaction> transaction = this.apiService
-            .getTransactionStatus(ref).execute();
+        .getTransactionStatus(ref).execute();
     return transaction.body();
 
   }
 
 
-  public String requestToPay(String mobile, String amount, String external_id, String payee_note, String payer_message, String currency) throws IOException {
-    RequestToPay rBody = new RequestToPay(mobile, amount, external_id, payee_note, payer_message, currency);
+  /**
+   * Request To Pay.
+   *
+   * @param mobile       String
+   * @param amount       String
+   * @param externalId   String
+   * @param payeeNote    String
+   * @param payerMessage String
+   * @param currency     String
+   * @return String
+   * @throws IOException when there is a network error
+   */
+  public String requestToPay(String mobile, String amount, String externalId, String payeeNote,
+                             String payerMessage, String currency) throws IOException {
+    RequestToPay rbody = new RequestToPay(mobile, amount, externalId,
+        payeeNote, payerMessage, currency);
     String ref = UUID.randomUUID().toString();
-    this.apiService.requestToPay(rBody, ref).execute();
+    this.apiService.requestToPay(rbody, ref).execute();
     return ref;
 
   }
 
+  /**
+   * Request To Pay.
+   *
+   * @param opts HashMap
+   * @return String
+   * @throws IOException when there is a network error
+   */
   public String requestToPay(HashMap<String, String> opts) throws IOException {
-    RequestToPay rBody = new RequestToPay(opts.get("mobile"), opts.get("amount"), opts.get("externalId"), opts.get("payeeNote"), opts.get("payerMessage"), this.opts.getCurrency());
+    RequestToPay rbody = new RequestToPay(opts.get("mobile"), opts.get("amount"),
+        opts.get("externalId"), opts.get("payeeNote"), opts.get("payerMessage"),
+        this.opts.getCurrency());
     String ref = UUID.randomUUID().toString();
-    this.apiService.requestToPay(rBody, ref).execute();
+    this.apiService.requestToPay(rbody, ref).execute();
     return ref;
 
   }

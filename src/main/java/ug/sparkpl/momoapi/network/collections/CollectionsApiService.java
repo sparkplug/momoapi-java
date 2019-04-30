@@ -69,12 +69,12 @@ public interface CollectionsApiService {
   /**
    * Get Transaction Status.
    *
-   * @param transaction_id String
+   * @param transactionId String
    * @return Transaction object
    */
-  @GET("/collection/v1_0/requesttopay/{transaction_id}")
+  @GET("/collection/v1_0/requesttopay/{transactionId}")
   @Headers("Content-Type: application/json")
-  Call<Transaction> getTransactionStatus(@Path("transaction_id") String transaction_id);
+  Call<Transaction> getTransactionStatus(@Path("transactionId") String transactionId);
 
 
   /**

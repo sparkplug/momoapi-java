@@ -8,6 +8,11 @@ import java.io.IOException;
 public final class MomoApiException extends IOException {
 
 
+  /**
+   * MomoApiException.
+   *
+   * @param response String
+   */
   public MomoApiException(String response) {
     super(response);
 

@@ -1,27 +1,30 @@
 package ug.sparkpl.momoapi.network.disbursements;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import okhttp3.Credentials;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.logging.HttpLoggingInterceptor;
-import org.joda.time.DateTime;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import ug.sparkpl.momoapi.models.AccessToken;
 import ug.sparkpl.momoapi.network.MomoApiException;
 import ug.sparkpl.momoapi.network.RequestOptions;
 import ug.sparkpl.momoapi.utils.DateTimeTypeConverter;
 
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.joda.time.DateTime;
+
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import okhttp3.Credentials;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class DisbursementsAuthorizationInterceptor implements Interceptor {
@@ -31,16 +34,22 @@ public class DisbursementsAuthorizationInterceptor implements Interceptor {
   private DisbursementsSession session;
   private RequestOptions opts;
 
+  /**
+   * DisbursementsAuthorizationInterceptor.
+   *
+   * @param session DisbursementsSession
+   * @param opts    RequestOptions
+   */
   public DisbursementsAuthorizationInterceptor(DisbursementsSession session, RequestOptions opts) {
 
     this.session = session;
     this.opts = opts;
     this.logger = Logger.getLogger(DisbursementsAuthorizationInterceptor.class.getName());
 
-    Gson gson = new GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
-            .create();
+    final Gson gson = new GsonBuilder()
+        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+        .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
+        .create();
 
 
     final OkHttpClient.Builder okhttpbuilder = new OkHttpClient.Builder();
@@ -58,37 +67,50 @@ public class DisbursementsAuthorizationInterceptor implements Interceptor {
 
 
     OkHttpClient httpClient = okhttpbuilder
-            .build();
+        .build();
 
 
     Retrofit retrofitClient = new Retrofit.Builder()
-            .client(httpClient)
-            .baseUrl(this.opts.getBaseUrl())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-            .build();
+        .client(httpClient)
+        .baseUrl(this.opts.getBaseUrl())
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+        .build();
 
     this.apiService = retrofitClient.create(DisbursementsApiService.class);
 
   }
 
 
+  /**
+   * request wrapper.
+   *
+   * @param initialRequest Request
+   * @return Request
+   */
   private Request request(final Request initialRequest) {
 
     this.logger.log(Level.INFO, "Using token >>>>>>>>>>>>>>>>> " + this.session.getToken());
 
 
     return initialRequest.newBuilder()
-            //.header("Accept", "application/json")
-            .addHeader("Authorization", "Bearer " + this.session.getToken())
-            .addHeader("Ocp-Apim-Subscription-Key", this.opts.getDisbursementPrimaryKey())
-            .addHeader("X-Target-Environment", this.opts.getTargetEnvironment())
+        //.header("Accept", "application/json")
+        .addHeader("Authorization", "Bearer " + this.session.getToken())
+        .addHeader("Ocp-Apim-Subscription-Key", this.opts.getDisbursementPrimaryKey())
+        .addHeader("X-Target-Environment", this.opts.getTargetEnvironment())
 
-            .method(initialRequest.method(), initialRequest.body())
-            .build();
+        .method(initialRequest.method(), initialRequest.body())
+        .build();
   }
 
 
+  /**
+   * Intercept.
+   *
+   * @param chain Chain
+   * @return Response
+   * @throws IOException when there is a network error
+   */
   @Override
   public okhttp3.Response intercept(Chain chain) throws IOException {
     okhttp3.Response mainResponse = chain.proceed(request(chain.request()));
@@ -102,9 +124,10 @@ public class DisbursementsAuthorizationInterceptor implements Interceptor {
       this.logger.log(Level.INFO, "<<<<<<<<<<<<<<<Getting Fresh Token");
 
 
-      String credentials = Credentials.basic(this.opts.getDisbursementUserId(), this.opts.getDisbursementApiSecret());
+      String credentials = Credentials.basic(this.opts.getDisbursementUserId(),
+          this.opts.getDisbursementApiSecret());
       Response<AccessToken> loginResponse = this.apiService
-              .getToken(credentials, this.opts.getDisbursementPrimaryKey()).execute();
+          .getToken(credentials, this.opts.getDisbursementPrimaryKey()).execute();
 
       if (loginResponse.isSuccessful()) {
         // login request succeed, new token generated
@@ -113,15 +136,17 @@ public class DisbursementsAuthorizationInterceptor implements Interceptor {
         this.session.saveToken(token.getToken());
         // retry the 'mainRequest' which encountered an authentication error
         // add new token into 'mainRequest' header and request again
-        Request.Builder builder = mainRequest.newBuilder().addHeader("Authorization", "Bearer " + this.session.getToken())
-                .addHeader("Ocp-Apim-Subscription-Key", this.opts.getDisbursementPrimaryKey())
-                .addHeader("X-Target-Environment", this.opts.getTargetEnvironment()).
-                        method(mainRequest.method(), mainRequest.body());
+        Request.Builder builder = mainRequest.newBuilder().addHeader("Authorization",
+            "Bearer " + this.session.getToken())
+            .addHeader("Ocp-Apim-Subscription-Key", this.opts.getDisbursementPrimaryKey())
+            .addHeader("X-Target-Environment", this.opts.getTargetEnvironment())
+            .method(mainRequest.method(), mainRequest.body());
         mainResponse = chain.proceed(builder.build());
       }
     } else if (!mainResponse.isSuccessful()) {
 
-      this.logger.log(Level.INFO, "<<<<<<<<<<<<<<< ETETETET  " + mainResponse.code() + "  .." + mainResponse.body().string());
+      this.logger.log(Level.INFO, "<<<<<<<<<<<<<<< ETETETET  "
+          + mainResponse.code() + "  .." + mainResponse.body().string());
 
 
       throw new MomoApiException(mainResponse.body().string());

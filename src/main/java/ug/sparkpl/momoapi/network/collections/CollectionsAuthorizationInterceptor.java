@@ -46,7 +46,7 @@ public class CollectionsAuthorizationInterceptor implements Interceptor {
     this.opts = opts;
     this.logger = Logger.getLogger(CollectionsAuthorizationInterceptor.class.getName());
 
-    Gson gson = new GsonBuilder()
+    final Gson gson = new GsonBuilder()
         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
         .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
         .create();
@@ -86,7 +86,7 @@ public class CollectionsAuthorizationInterceptor implements Interceptor {
    * request wrapper.
    *
    * @param initialRequest Request
-   * @return
+   * @return Request
    */
   private Request request(final Request initialRequest) {
 
@@ -124,7 +124,8 @@ public class CollectionsAuthorizationInterceptor implements Interceptor {
       this.logger.log(Level.INFO, "<<<<<<<<<<<<<<<Getting Fresh Token");
 
 
-      String credentials = Credentials.basic(this.opts.getCollectionUserId(), this.opts.getCollectionApiSecret());
+      String credentials = Credentials.basic(this.opts.getCollectionUserId(),
+          this.opts.getCollectionApiSecret());
       Response<AccessToken> loginResponse = this.apiService
           .getToken(credentials, this.opts.getCollectionPrimaryKey()).execute();
 
@@ -135,15 +136,17 @@ public class CollectionsAuthorizationInterceptor implements Interceptor {
         this.session.saveToken(token.getToken());
         // retry the 'mainRequest' which encountered an authentication error
         // add new token into 'mainRequest' header and request again
-        Request.Builder builder = mainRequest.newBuilder().addHeader("Authorization", "Bearer " + this.session.getToken())
+        Request.Builder builder = mainRequest.newBuilder().addHeader("Authorization",
+            "Bearer " + this.session.getToken())
             .addHeader("Ocp-Apim-Subscription-Key", this.opts.getCollectionPrimaryKey())
-            .addHeader("X-Target-Environment", this.opts.getTargetEnvironment()).
-                method(mainRequest.method(), mainRequest.body());
+            .addHeader("X-Target-Environment", this.opts.getTargetEnvironment())
+            .method(mainRequest.method(), mainRequest.body());
         mainResponse = chain.proceed(builder.build());
       }
     } else if (!mainResponse.isSuccessful()) {
 
-      this.logger.log(Level.INFO, "<<<<<<<<<<<<<<< ETETETET  " + mainResponse.code() + "  .." + mainResponse.body().string());
+      this.logger.log(Level.INFO, "<<<<<<<<<<<<<<< ETETETET  "
+          + mainResponse.code() + "  .." + mainResponse.body().string());
 
 
       throw new MomoApiException(mainResponse.body().string());
