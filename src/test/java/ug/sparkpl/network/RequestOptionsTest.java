@@ -9,16 +9,39 @@ public class RequestOptionsTest {
 
     @Test
     public void testPersistentValuesInToBuilder() {
-        RequestOptions opts = RequestOptions.builder()
+        RequestOptions.Builder opts = RequestOptions.builder()
                 .setCollectionApiSecret("sec")
                 .setCollectionPrimaryKey("123")
-                .setCollectionUserId("1234").build();
+                .setCollectionUserId("1234")
+                .setCurrency("UGX")
+                .setTargetEnvironment("test")
+                .setBaseUrl("new_base")
+                .setRemittanceUserId("remituid")
+                .setRemittancePrimaryKey("remKey")
+                .setRemittanceApiSecret("remSecret")
+                .setDisbursementUserId("duid")
+                .setRemittanceApiSecret("dSecret")
+                .setRemittancePrimaryKey("dKey")
+                .build().toBuilder();
 
 
         // assuming these are stable across a given stripe integration
-        assertEquals("sec", opts.getCollectionApiSecret());
+
         assertEquals("123", opts.getCollectionPrimaryKey());
-        assertEquals("1234", opts.getRemittanceUserId());
+        assertEquals("sec", opts.getCollectionApiSecret());
+        assertEquals("1234", opts.getCollectionUserId());
+        assertEquals("UGX", opts.getCurrency());
+        assertEquals("test", opts.getTargetEnvironment());
+        assertEquals("UGX", opts.getCurrency());
+        assertEquals("new_base", opts.getBaseUrl());
+        assertEquals("remituid", opts.getRemittanceUserId());
+        assertEquals("remKey", opts.getRemittancePrimaryKey());
+        assertEquals("remSecret", opts.getRemittanceApiSecret());
+        assertEquals("dKey", opts.getDisbursementPrimaryKey());
+        assertEquals("dSecret", opts.getDisbursementApiSecret());
+        assertEquals("duid", opts.getDisbursementUserId());
+
+
     }
 
 }

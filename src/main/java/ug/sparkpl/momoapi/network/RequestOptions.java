@@ -24,7 +24,6 @@ public class RequestOptions {
     private final String TARGET_ENVIRONMENT;
     private final String CURRENCY;
 
-
     public RequestOptions(String COLLECTION_API_SECRET, String COLLECTION_PRIMARY_KEY, String COLLECTION_USER_ID, String REMITTANCE_USER_ID, String REMITTANCE_PRIMARY_KEY, String REMITTANCE_API_SECRET, String DISBURSEMENT_API_SECRET, String DISBURSEMENT_PRIMARY_KEY, String DISBURSEMENT_USER_ID, String BASE_URL, String TARGET_ENVIRONMENT, String CURRENCY) {
 
         this.COLLECTION_API_SECRET = COLLECTION_API_SECRET;
@@ -49,6 +48,22 @@ public class RequestOptions {
         return new Builder();
     }
 
+    public Builder toBuilder() {
+        return new Builder()
+                .setCollectionPrimaryKey(this.COLLECTION_PRIMARY_KEY)
+                .setCollectionApiSecret(this.COLLECTION_API_SECRET)
+                .setCollectionUserId(this.COLLECTION_USER_ID)
+                .setCurrency(this.CURRENCY)
+                .setBaseUrl(this.BASE_URL)
+                .setTargetEnvironment(this.TARGET_ENVIRONMENT)
+                .setDisbursementApiSecret(this.DISBURSEMENT_API_SECRET)
+                .setDisbursementPrimaryKey(this.DISBURSEMENT_PRIMARY_KEY)
+                .setDisbursementUserId(this.DISBURSEMENT_USER_ID)
+                .setRemittanceApiSecret(this.REMITTANCE_API_SECRET)
+                .setRemittancePrimaryKey(this.REMITTANCE_PRIMARY_KEY)
+                .setRemittanceUserId(this.REMITTANCE_USER_ID);
+
+    }
 
     public String getCollectionUserId() {
         return this.COLLECTION_USER_ID;
@@ -149,15 +164,8 @@ public class RequestOptions {
             return normalized;
         }
 
-
-        public Builder setCollectionUserId(String collectionUserId) {
-            this.COLLECTION_USER_ID = collectionUserId;
-            return this;
-        }
-
-        public Builder setCollectionApiSecret(String collectionApiSecret) {
-            this.COLLECTION_API_SECRET = collectionApiSecret;
-            return this;
+        public String getCollectionPrimaryKey() {
+            return this.COLLECTION_PRIMARY_KEY;
         }
 
         public Builder setCollectionPrimaryKey(String collectionPrimaryKey) {
@@ -165,14 +173,26 @@ public class RequestOptions {
             return this;
         }
 
-        public Builder setRemittanceUserId(String remittanceUserId) {
-            this.REMITTANCE_USER_ID = remittanceUserId;
+        public String getCollectionUserId() {
+            return this.COLLECTION_USER_ID;
+        }
+
+        public Builder setCollectionUserId(String collectionUserId) {
+            this.COLLECTION_USER_ID = collectionUserId;
             return this;
         }
 
-        public Builder setRemittanceApiSecret(String remittanceApiSecret) {
-            this.REMITTANCE_API_SECRET = remittanceApiSecret;
+        public String getCollectionApiSecret() {
+            return this.COLLECTION_API_SECRET;
+        }
+
+        public Builder setCollectionApiSecret(String collectionApiSecret) {
+            this.COLLECTION_API_SECRET = collectionApiSecret;
             return this;
+        }
+
+        public String getRemittancePrimaryKey() {
+            return this.REMITTANCE_PRIMARY_KEY;
         }
 
         public Builder setRemittancePrimaryKey(String remittancePrimaryKey) {
@@ -180,14 +200,26 @@ public class RequestOptions {
             return this;
         }
 
-        public Builder setDisbursementUserId(String disbursementUserId) {
-            this.DISBURSEMENT_USER_ID = disbursementUserId;
+        public String getRemittanceUserId() {
+            return REMITTANCE_USER_ID;
+        }
+
+        public Builder setRemittanceUserId(String remittanceUserId) {
+            this.REMITTANCE_USER_ID = remittanceUserId;
             return this;
         }
 
-        public Builder setDisbursementApiSecret(String disbursementApiSecret) {
-            this.DISBURSEMENT_API_SECRET = disbursementApiSecret;
+        public String getRemittanceApiSecret() {
+            return this.REMITTANCE_API_SECRET;
+        }
+
+        public Builder setRemittanceApiSecret(String remittanceApiSecret) {
+            this.REMITTANCE_API_SECRET = remittanceApiSecret;
             return this;
+        }
+
+        public String getDisbursementPrimaryKey() {
+            return this.DISBURSEMENT_PRIMARY_KEY;
         }
 
         public Builder setDisbursementPrimaryKey(String disbursementPrimaryKey) {
@@ -195,14 +227,35 @@ public class RequestOptions {
             return this;
         }
 
+        public String getDisbursementUserId() {
+            return this.DISBURSEMENT_USER_ID;
+        }
+
+        public Builder setDisbursementUserId(String disbursementUserId) {
+            this.DISBURSEMENT_USER_ID = disbursementUserId;
+            return this;
+        }
+
+        public String getDisbursementApiSecret() {
+            return this.DISBURSEMENT_API_SECRET;
+        }
+
+        public Builder setDisbursementApiSecret(String disbursementApiSecret) {
+            this.DISBURSEMENT_API_SECRET = disbursementApiSecret;
+            return this;
+        }
+
+        public String getBaseUrl() {
+            return this.BASE_URL;
+        }
+
         public Builder setBaseUrl(String url) {
             this.BASE_URL = url;
             return this;
         }
 
-        public Builder setCurrency(String currency) {
-            this.CURRENCY = CURRENCY;
-            return this;
+        public String getTargetEnvironment() {
+            return this.TARGET_ENVIRONMENT;
         }
 
         public Builder setTargetEnvironment(String environment) {
@@ -210,6 +263,14 @@ public class RequestOptions {
             return this;
         }
 
+        public String getCurrency() {
+            return this.CURRENCY;
+        }
+
+        public Builder setCurrency(String currency) {
+            this.CURRENCY = currency;
+            return this;
+        }
 
         public RequestOptions build() {
             return new RequestOptions(
