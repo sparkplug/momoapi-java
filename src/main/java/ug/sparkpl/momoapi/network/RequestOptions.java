@@ -7,131 +7,229 @@ import lombok.EqualsAndHashCode;
 public class RequestOptions {
 
 
-  private final String COLLECTION_USER_ID;
-  private final String COLLECTION_API_SECRET;
+  private final String collectionUserId;
+  private final String collectionApiSecret;
   private final String collectionPrimaryKey;
 
-  private final String REMITTANCE_PRIMARY_KEY;
-  private final String REMITTANCE_USER_ID;
-  private final String REMITTANCE_API_SECRET;
+  private final String remittancePrimaryKey;
+  private final String remittanceUserId;
+  private final String remittanceApiSecret;
 
 
   private final String disbursementPrimaryKey;
-  private final String DISBURSEMENT_USER_ID;
-  private final String DISBURSEMENT_API_SECRET;
+  private final String disbursementUserId;
+  private final String disbursementApiSecret;
 
-  private final String BASE_URL;
+  private final String baseUrl;
   private final String targetEnvironment;
-  private final String CURRENCY;
+  private final String currency;
 
-  public RequestOptions(String COLLECTION_API_SECRET, String collectionPrimaryKey, String COLLECTION_USER_ID, String REMITTANCE_USER_ID, String REMITTANCE_PRIMARY_KEY, String REMITTANCE_API_SECRET, String DISBURSEMENT_API_SECRET, String disbursementPrimaryKey, String DISBURSEMENT_USER_ID, String BASE_URL, String targetEnvironment, String CURRENCY) {
+  /**
+   * Build options.
+   *
+   * @param collectionApiSecret    String
+   * @param collectionPrimaryKey   String
+   * @param collectionUserId       String
+   * @param remittanceUserId       String
+   * @param remittancePrimaryKey   String
+   * @param remittanceApiSecret    String
+   * @param disbursementApiSecret  String
+   * @param disbursementPrimaryKey String
+   * @param disbursementUserId     String
+   * @param baseUrl                String
+   * @param targetEnvironment      String
+   * @param currency               String
+   */
+  public RequestOptions(String collectionApiSecret,
+                        String collectionPrimaryKey,
+                        String collectionUserId,
+                        String remittanceUserId,
+                        String remittancePrimaryKey,
+                        String remittanceApiSecret,
+                        String disbursementApiSecret,
+                        String disbursementPrimaryKey,
+                        String disbursementUserId,
+                        String baseUrl,
+                        String targetEnvironment,
+                        String currency) {
 
-    this.COLLECTION_API_SECRET = COLLECTION_API_SECRET;
+    this.collectionApiSecret = collectionApiSecret;
     this.collectionPrimaryKey = collectionPrimaryKey;
-    this.COLLECTION_USER_ID = COLLECTION_USER_ID;
+    this.collectionUserId = collectionUserId;
 
-    this.REMITTANCE_USER_ID = REMITTANCE_USER_ID;
-    this.REMITTANCE_PRIMARY_KEY = REMITTANCE_PRIMARY_KEY;
-    this.REMITTANCE_API_SECRET = REMITTANCE_API_SECRET;
+    this.remittanceUserId = remittanceUserId;
+    this.remittancePrimaryKey = remittancePrimaryKey;
+    this.remittanceApiSecret = remittanceApiSecret;
 
-    this.DISBURSEMENT_API_SECRET = DISBURSEMENT_API_SECRET;
+    this.disbursementApiSecret = disbursementApiSecret;
     this.disbursementPrimaryKey = disbursementPrimaryKey;
-    this.DISBURSEMENT_USER_ID = DISBURSEMENT_USER_ID;
-    this.BASE_URL = BASE_URL;
+    this.disbursementUserId = disbursementUserId;
+    this.baseUrl = baseUrl;
     this.targetEnvironment = targetEnvironment;
-    this.CURRENCY = CURRENCY;
+    this.currency = currency;
 
 
   }
 
+  /**
+   * Builder.
+   *
+   * @return Builder
+   */
   public static Builder builder() {
     return new Builder();
   }
 
+  /**
+   * for playing nice with unittests.
+   *
+   * @return Builder
+   */
   public Builder toBuilder() {
     return new Builder()
-            .setCollectionPrimaryKey(this.collectionPrimaryKey)
-            .setCollectionApiSecret(this.COLLECTION_API_SECRET)
-            .setCollectionUserId(this.COLLECTION_USER_ID)
-            .setCurrency(this.CURRENCY)
-            .setBaseUrl(this.BASE_URL)
-            .setTargetEnvironment(this.targetEnvironment)
-            .setDisbursementApiSecret(this.DISBURSEMENT_API_SECRET)
-            .setDisbursementPrimaryKey(this.disbursementPrimaryKey)
-            .setDisbursementUserId(this.DISBURSEMENT_USER_ID)
-            .setRemittanceApiSecret(this.REMITTANCE_API_SECRET)
-            .setRemittancePrimaryKey(this.REMITTANCE_PRIMARY_KEY)
-            .setRemittanceUserId(this.REMITTANCE_USER_ID);
+        .setCollectionPrimaryKey(this.collectionPrimaryKey)
+        .setCollectionApiSecret(this.collectionApiSecret)
+        .setCollectionUserId(this.collectionUserId)
+        .setCurrency(this.currency)
+        .setBaseUrl(this.baseUrl)
+        .setTargetEnvironment(this.targetEnvironment)
+        .setDisbursementApiSecret(this.disbursementApiSecret)
+        .setDisbursementPrimaryKey(this.disbursementPrimaryKey)
+        .setDisbursementUserId(this.disbursementUserId)
+        .setRemittanceApiSecret(this.remittanceApiSecret)
+        .setRemittancePrimaryKey(this.remittancePrimaryKey)
+        .setRemittanceUserId(this.remittanceUserId);
 
   }
 
+  /**
+   * get Collection Id.
+   *
+   * @return String
+   */
   public String getCollectionUserId() {
-    return this.COLLECTION_USER_ID;
+    return this.collectionUserId;
   }
 
+  /**
+   * get collection API secret.
+   *
+   * @return String
+   */
   public String getCollectionApiSecret() {
-    return this.COLLECTION_API_SECRET;
+    return this.collectionApiSecret;
   }
 
+  /**
+   * Get collection Primary Key.
+   *
+   * @return String
+   */
   public String getCollectionPrimaryKey() {
     return this.collectionPrimaryKey;
   }
 
+  /**
+   * Get Remittance Primary Key.
+   *
+   * @return String
+   */
+
   public String getRemittancePrimaryKey() {
-    return this.REMITTANCE_PRIMARY_KEY;
+    return this.remittancePrimaryKey;
   }
 
 
+  /**
+   * get Remittance user Id.
+   *
+   * @return String
+   */
   public String getRemittanceUserId() {
-    return REMITTANCE_USER_ID;
+    return remittanceUserId;
   }
 
+  /**
+   * Get Remittance Api Secret.
+   *
+   * @return String
+   */
   public String getRemittanceApiSecret() {
-    return this.REMITTANCE_API_SECRET;
+    return this.remittanceApiSecret;
   }
 
 
+  /**
+   * Get Disbursement Primnary Key.
+   *
+   * @return String
+   */
   public String getDisbursementPrimaryKey() {
     return this.disbursementPrimaryKey;
   }
 
 
+  /**
+   * Get Disbursement User Id.
+   *
+   * @return String
+   */
   public String getDisbursementUserId() {
-    return this.DISBURSEMENT_USER_ID;
+    return this.disbursementUserId;
   }
 
+  /**
+   * Get Disbursement Api Secret.
+   *
+   * @return String
+   */
   public String getDisbursementApiSecret() {
-    return this.DISBURSEMENT_API_SECRET;
+    return this.disbursementApiSecret;
   }
 
+  /**
+   * Get Base Url.
+   *
+   * @return String
+   */
   public String getBaseUrl() {
-    return this.BASE_URL;
+    return this.baseUrl;
   }
 
+  /**
+   * Get Target Environment.
+   *
+   * @return String
+   */
   public String getTargetEnvironment() {
     return this.targetEnvironment;
   }
 
+  /**
+   * get Currency.
+   *
+   * @return String
+   */
   public String getCurrency() {
-    return this.CURRENCY;
+    return this.currency;
   }
 
 
   public static class Builder {
 
-    private String COLLECTION_USER_ID;
-    private String COLLECTION_API_SECRET;
+    private String collectionUserId;
+    private String collectionApiSecret;
     private String collectionPrimaryKey;
-    private String REMITTANCE_PRIMARY_KEY;
-    private String REMITTANCE_USER_ID;
-    private String REMITTANCE_API_SECRET;
+    private String remittancePrimaryKey;
+    private String remittanceUserId;
+    private String remittanceApiSecret;
     private String disbursementPrimaryKey;
-    private String DISBURSEMENT_USER_ID;
-    private String DISBURSEMENT_API_SECRET;
+    private String disbursementUserId;
+    private String disbursementApiSecret;
 
-    private String BASE_URL = "https://ericssonbasicapi2.azure-api.net";
+    private String baseUrl = "https://ericssonbasicapi2.azure-api.net";
 
-    private String CURRENCY = "EUR";
+    private String currency = "EUR";
 
     private String targetEnvironment = "sandbox";
 
@@ -141,20 +239,27 @@ public class RequestOptions {
      * API version) as default values.
      */
     public Builder() {
-      this.COLLECTION_USER_ID = System.getenv("COLLECTION_USER_ID");
-      this.COLLECTION_API_SECRET = System.getenv("COLLECTION_API_SECRET");
+      this.collectionUserId = System.getenv("collectionUserId");
+      this.collectionApiSecret = System.getenv("collectionApiSecret");
       this.collectionPrimaryKey = System.getenv("collectionPrimaryKey");
 
-      this.REMITTANCE_PRIMARY_KEY = System.getenv("REMITTANCE_PRIMARY_KEY");
-      this.REMITTANCE_USER_ID = System.getenv("REMITTANCE_USER_ID");
-      this.REMITTANCE_API_SECRET = System.getenv("REMITTANCE_API_SECRET");
+      this.remittancePrimaryKey = System.getenv("remittancePrimaryKey");
+      this.remittanceUserId = System.getenv("remittanceUserId");
+      this.remittanceApiSecret = System.getenv("remittanceApiSecret");
 
       this.disbursementPrimaryKey = System.getenv("disbursementPrimaryKey");
-      this.DISBURSEMENT_USER_ID = System.getenv("DISBURSEMENT_USER_ID");
-      this.DISBURSEMENT_API_SECRET = System.getenv("DISBURSEMENT_API_SECRET");
+      this.disbursementUserId = System.getenv("disbursementUserId");
+      this.disbursementApiSecret = System.getenv("disbursementApiSecret");
 
     }
 
+
+    /**
+     * Normalize Keys.
+     *
+     * @param key String
+     * @return String
+     */
     private static String normalizeKey(String key) {
 
       String normalized = key.trim();
@@ -164,130 +269,268 @@ public class RequestOptions {
       return normalized;
     }
 
+    /**
+     * Get Collection primary key.
+     *
+     * @return String
+     */
     public String getCollectionPrimaryKey() {
       return this.collectionPrimaryKey;
     }
 
+    /**
+     * Set Collection Primary Key.
+     *
+     * @param collectionPrimaryKey String
+     * @return String
+     */
     public Builder setCollectionPrimaryKey(String collectionPrimaryKey) {
       this.collectionPrimaryKey = collectionPrimaryKey;
       return this;
     }
 
+    /**
+     * get Collection User Id.
+     *
+     * @return String
+     */
     public String getCollectionUserId() {
-      return this.COLLECTION_USER_ID;
+      return this.collectionUserId;
     }
 
+    /**
+     * Set Collection User Id.
+     *
+     * @param collectionUserId String
+     * @return Builder
+     */
     public Builder setCollectionUserId(String collectionUserId) {
-      this.COLLECTION_USER_ID = collectionUserId;
+      this.collectionUserId = collectionUserId;
       return this;
     }
 
+    /**
+     * get Collection Api Secret.
+     *
+     * @return String
+     */
     public String getCollectionApiSecret() {
-      return this.COLLECTION_API_SECRET;
+      return this.collectionApiSecret;
     }
 
+    /**
+     * Set Collection Api Secret.
+     *
+     * @param collectionApiSecret String
+     * @return String
+     */
     public Builder setCollectionApiSecret(String collectionApiSecret) {
-      this.COLLECTION_API_SECRET = collectionApiSecret;
+      this.collectionApiSecret = collectionApiSecret;
       return this;
     }
 
+    /**
+     * Get Remittance Primary Key.
+     *
+     * @return String
+     */
     public String getRemittancePrimaryKey() {
-      return this.REMITTANCE_PRIMARY_KEY;
+      return this.remittancePrimaryKey;
     }
 
+    /**
+     * Set Remittance Primary Key.
+     *
+     * @param remittancePrimaryKey String
+     * @return Builder
+     */
     public Builder setRemittancePrimaryKey(String remittancePrimaryKey) {
-      this.REMITTANCE_PRIMARY_KEY = remittancePrimaryKey;
+      this.remittancePrimaryKey = remittancePrimaryKey;
       return this;
     }
 
+    /**
+     * Get Remittance User Id.
+     *
+     * @return String
+     */
     public String getRemittanceUserId() {
-      return REMITTANCE_USER_ID;
+      return remittanceUserId;
     }
+
+    /**
+     * Set Remittance User Id.
+     *
+     * @param remittanceUserId String
+     * @return Builder
+     */
 
     public Builder setRemittanceUserId(String remittanceUserId) {
-      this.REMITTANCE_USER_ID = remittanceUserId;
+      this.remittanceUserId = remittanceUserId;
       return this;
     }
 
+    /**
+     * Set Remittance Api Secret.
+     *
+     * @return String
+     */
     public String getRemittanceApiSecret() {
-      return this.REMITTANCE_API_SECRET;
+      return this.remittanceApiSecret;
     }
 
+    /**
+     * Set Remittance Api Secret.
+     *
+     * @param remittanceApiSecret String
+     * @return Builder
+     */
     public Builder setRemittanceApiSecret(String remittanceApiSecret) {
-      this.REMITTANCE_API_SECRET = remittanceApiSecret;
+      this.remittanceApiSecret = remittanceApiSecret;
       return this;
     }
 
+    /**
+     * Get Disbursements Primary Key.
+     *
+     * @return String
+     */
     public String getDisbursementPrimaryKey() {
       return this.disbursementPrimaryKey;
     }
 
+    /**
+     * Set Disbursements Primary Key.
+     *
+     * @param disbursementPrimaryKey String
+     * @return Builder
+     */
     public Builder setDisbursementPrimaryKey(String disbursementPrimaryKey) {
       this.disbursementPrimaryKey = disbursementPrimaryKey;
       return this;
     }
 
+    /**
+     * Get Disbursements User Id.
+     *
+     * @return String
+     */
     public String getDisbursementUserId() {
-      return this.DISBURSEMENT_USER_ID;
+      return this.disbursementUserId;
     }
 
+    /**
+     * Set Disbursements User Id.
+     *
+     * @param disbursementUserId String
+     * @return Builder
+     */
     public Builder setDisbursementUserId(String disbursementUserId) {
-      this.DISBURSEMENT_USER_ID = disbursementUserId;
+      this.disbursementUserId = disbursementUserId;
       return this;
     }
 
+    /**
+     * Get Disbursements Api Secret.
+     *
+     * @return String
+     */
     public String getDisbursementApiSecret() {
-      return this.DISBURSEMENT_API_SECRET;
+      return this.disbursementApiSecret;
     }
 
+    /**
+     * Set Disbursement Api Secret.
+     *
+     * @param disbursementApiSecret String
+     * @return Builder
+     */
     public Builder setDisbursementApiSecret(String disbursementApiSecret) {
-      this.DISBURSEMENT_API_SECRET = disbursementApiSecret;
+      this.disbursementApiSecret = disbursementApiSecret;
       return this;
     }
 
+    /**
+     * Get Base Url.
+     *
+     * @return String
+     */
     public String getBaseUrl() {
-      return this.BASE_URL;
+      return this.baseUrl;
     }
 
+    /**
+     * Set Base Url.
+     *
+     * @param url String
+     * @return Builder
+     */
     public Builder setBaseUrl(String url) {
-      this.BASE_URL = url;
+      this.baseUrl = url;
       return this;
     }
 
+    /**
+     * Get Target Environment.
+     *
+     * @return String
+     */
     public String getTargetEnvironment() {
       return this.targetEnvironment;
     }
 
+    /**
+     * Set Target Environment.
+     *
+     * @param environment String
+     * @return Builder
+     */
     public Builder setTargetEnvironment(String environment) {
       this.targetEnvironment = environment;
       return this;
     }
 
+    /**
+     * Get Currency.
+     *
+     * @return String
+     */
     public String getCurrency() {
-      return this.CURRENCY;
+      return this.currency;
     }
 
+    /**
+     * Set Currency.
+     *
+     * @param currency String
+     * @return Builder
+     */
     public Builder setCurrency(String currency) {
-      this.CURRENCY = currency;
+      this.currency = currency;
       return this;
     }
 
+    /**
+     * RequestOptions.
+     *
+     * @return RequestOptions
+     */
     public RequestOptions build() {
       return new RequestOptions(
-              this.COLLECTION_API_SECRET,
-              this.collectionPrimaryKey,
-              this.COLLECTION_USER_ID,
+          this.collectionApiSecret,
+          this.collectionPrimaryKey,
+          this.collectionUserId,
 
-              this.REMITTANCE_USER_ID,
-              this.REMITTANCE_PRIMARY_KEY,
-              this.REMITTANCE_API_SECRET,
+          this.remittanceUserId,
+          this.remittancePrimaryKey,
+          this.remittanceApiSecret,
 
-              this.DISBURSEMENT_API_SECRET,
-              this.disbursementPrimaryKey,
-              this.DISBURSEMENT_USER_ID,
-              this.BASE_URL,
-              this.targetEnvironment,
-              this.CURRENCY
+          this.disbursementApiSecret,
+          this.disbursementPrimaryKey,
+          this.disbursementUserId,
+          this.baseUrl,
+          this.targetEnvironment,
+          this.currency
       );
 
     }
@@ -298,6 +541,11 @@ public class RequestOptions {
   public static class InvalidRequestOptionsException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Ovveride.
+     *
+     * @param message String
+     */
     public InvalidRequestOptionsException(String message) {
       super(message);
     }

@@ -1,16 +1,20 @@
 package ug.sparkpl.momoapi.network;
 
-import lombok.NonNull;
+import okhttp3.Response;
 
 public class ResponseException extends RuntimeException {
-  private final okhttp3.Response response;
+  private final Response response;
 
-  public ResponseException(final @NonNull okhttp3.Response response) {
+  /**
+   * ResponseException.
+   *
+   * @param response Response
+   */
+  public ResponseException(final Response response) {
     this.response = response;
   }
 
-  public @NonNull
-  okhttp3.Response response() {
+  public Response response() {
     return response;
   }
 }
