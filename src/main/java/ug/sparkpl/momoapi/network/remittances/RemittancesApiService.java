@@ -16,36 +16,42 @@ import retrofit2.http.Path;
 public interface RemittancesApiService {
 
   /**
-   * @param body
-   * @param ref
-   * @return
+   * transfer money.
+   *
+   * @param body Transfer
+   * @param ref  String
+   * @return Void
    */
   @POST("/remittance/v1_0/transfer/")
   @Headers("Content-Type: application/json")
   Call<Void> transfer(@Body Transfer body, @Header("X-Reference-Id") String ref);
 
   /**
-   * @param credentials
-   * @param subscriptionKey
-   * @return
+   * get Token.
+   *
+   * @param credentials     String
+   * @param subscriptionKey String
+   * @return AccessToken
    */
   @POST("/remittance/token/")
   @Headers("Content-Type: application/json")
   Call<AccessToken> getToken(@Header("Authorization") String credentials, @Header("Ocp-Apim-Subscription-Key") String subscriptionKey);
 
   /**
-   * Get Account Balance
+   * Get Account Balance.
    */
   @Headers("Content-Type: application/json")
   @GET("/remittance/v1_0/account/balance")
   Call<Balance> getBalance();
 
   /**
-   * @param transaction_id
-   * @return
+   * GetTransaction Status.
+   *
+   * @param transactionId
+   * @return Transaction
    */
-  @GET("/remittance/v1_0/transfer/{transaction_id}")
+  @GET("/remittance/v1_0/transfer/{transactionId}")
   @Headers("Content-Type: application/json")
-  Call<Transaction> getTransactionStatus(@Path("transaction_id") String transaction_id);
+  Call<Transaction> getTransactionStatus(@Path("transaction_id") String transactionId);
 
 }

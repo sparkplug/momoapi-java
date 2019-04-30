@@ -86,7 +86,7 @@ public class DisbursementsClient {
 
 
   /**
-   * getToken
+   * getToken.
    *
    * @return AccessToken
    * @throws IOException when network error occurs
@@ -113,10 +113,10 @@ public class DisbursementsClient {
   }
 
   /**
-   * get Transaction
+   * get Transaction.
    *
-   * @param ref
-   * @return
+   * @param ref String
+   * @return Transaction
    * @throws IOException when there is a network error
    */
 
@@ -133,18 +133,18 @@ public class DisbursementsClient {
    * @param mobile       String
    * @param amount       String
    * @param externalId   String
-   * @param payee_note   String
+   * @param payeeNote    String
    * @param payerMessage String
    * @param currency     String
-   * @return
+   * @return String
    * @throws IOException when there is a network error
    */
   public String transfer(String mobile, String amount,
-                         String externalId, String payee_note,
+                         String externalId, String payeeNote,
                          String payerMessage, String currency) throws IOException {
-    Transfer rBody = new Transfer(mobile, amount, externalId, payee_note, payerMessage, currency);
+    Transfer rbody = new Transfer(mobile, amount, externalId, payeeNote, payerMessage, currency);
     String ref = UUID.randomUUID().toString();
-    this.apiService.transfer(rBody, ref).execute();
+    this.apiService.transfer(rbody, ref).execute();
     return ref;
 
   }
@@ -152,16 +152,16 @@ public class DisbursementsClient {
   /**
    * transfer money.
    *
-   * @param opts
+   * @param opts HashMap
    * @return String
    * @throws IOException when there is a network error
    */
   public String transfer(HashMap<String, String> opts) throws IOException {
-    Transfer rBody = new Transfer(opts.get("mobile"), opts.get("amount"),
+    Transfer rbody = new Transfer(opts.get("mobile"), opts.get("amount"),
         opts.get("externalId"), opts.get("payeeNote"),
         opts.get("payerMessage"), this.opts.getCurrency());
     String ref = UUID.randomUUID().toString();
-    this.apiService.transfer(rBody, ref).execute();
+    this.apiService.transfer(rbody, ref).execute();
     return ref;
 
   }

@@ -1,7 +1,8 @@
 package ug.sparkpl.network;
 
-import org.junit.jupiter.api.Test;
 import ug.sparkpl.momoapi.network.RequestOptions;
+
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -10,19 +11,19 @@ public class RequestOptionsTest {
   @Test
   public void testPersistentValuesInToBuilder() {
     RequestOptions.Builder opts = RequestOptions.builder()
-            .setCollectionApiSecret("sec")
-            .setCollectionPrimaryKey("123")
-            .setCollectionUserId("1234")
-            .setCurrency("UGX")
-            .setTargetEnvironment("test")
-            .setBaseUrl("new_base")
-            .setRemittanceUserId("remituid")
-            .setRemittancePrimaryKey("remKey")
-            .setRemittanceApiSecret("remSecret")
-            .setDisbursementUserId("duid")
-            .setRemittanceApiSecret("dSecret")
-            .setRemittancePrimaryKey("dKey")
-            .build().toBuilder();
+        .setCollectionApiSecret("sec")
+        .setCollectionPrimaryKey("123")
+        .setCollectionUserId("1234")
+        .setCurrency("UGX")
+        .setTargetEnvironment("test")
+        .setBaseUrl("new_base")
+        .setRemittanceUserId("remituid")
+        .setRemittancePrimaryKey("remKey")
+        .setRemittanceApiSecret("remSecret")
+        .setDisbursementUserId("duid")
+        .setDisbursementApiSecret("dSecret")
+        .setDisbursementPrimaryKey("dKey")
+        .build().toBuilder();
 
 
     // assuming these are stable across a given stripe integration

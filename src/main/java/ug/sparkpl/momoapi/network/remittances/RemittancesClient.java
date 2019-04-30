@@ -135,10 +135,10 @@ public class RemittancesClient {
                          String payeeNote,
                          String payerMessage,
                          String currency) throws IOException {
-    Transfer rBody = new Transfer(mobile, amount, externalId,
+    Transfer rbody = new Transfer(mobile, amount, externalId,
         payeeNote, payerMessage, currency);
     String ref = UUID.randomUUID().toString();
-    this.apiService.transfer(rBody, ref).execute();
+    this.apiService.transfer(rbody, ref).execute();
     return ref;
 
   }
@@ -151,12 +151,12 @@ public class RemittancesClient {
    * @throws IOException when there is a network error
    */
   public String transfer(HashMap<String, String> opts) throws IOException {
-    Transfer rBody = new Transfer(opts.get("mobile"),
+    Transfer rbody = new Transfer(opts.get("mobile"),
         opts.get("amount"), opts.get("externalId"),
         opts.get("payeeNote"), opts.get("payerMessage"),
         opts.get("currency"));
     String ref = UUID.randomUUID().toString();
-    this.apiService.transfer(rBody, ref).execute();
+    this.apiService.transfer(rbody, ref).execute();
     return ref;
 
   }
