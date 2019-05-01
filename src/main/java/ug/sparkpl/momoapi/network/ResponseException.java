@@ -17,7 +17,7 @@ public class ResponseException extends RuntimeException {
   /**
    * response.
    *
-   * @return
+   * @return Response
    */
   public Response response() {
     return response;
