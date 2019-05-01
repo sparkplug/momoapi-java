@@ -23,11 +23,10 @@ artifacts {
     archives javadocJar
 }
 
-if (project.hasProperty("signing.keyId")) {
     signing {
         sign configurations.archives
     }
-}
+
 
 publishing {
     publications {

@@ -147,7 +147,9 @@ javadoc {
 }
 
 
-apply from: 'deploy.gradle'
+if (project.hasProperty("signing.keyId")) {
+    apply from: 'deploy.gradle'
+}
 
 test {
     useJUnitPlatform()
