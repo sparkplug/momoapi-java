@@ -42,6 +42,8 @@ public interface DisbursementsApiService {
 
   /**
    * Get Account Balance.
+   *
+   * @return Balance
    */
   @Headers("Content-Type: application/json")
   @GET("/disbursement/v1_0/account/balance")

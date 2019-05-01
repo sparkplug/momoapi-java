@@ -40,6 +40,8 @@ public interface RemittancesApiService {
 
   /**
    * Get Account Balance.
+   *
+   * @return Balance
    */
   @Headers("Content-Type: application/json")
   @GET("/remittance/v1_0/account/balance")
