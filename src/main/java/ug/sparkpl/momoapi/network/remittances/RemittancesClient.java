@@ -36,7 +36,9 @@ public class RemittancesClient {
 
 
   /**
-   * @param opts
+   * RemittancesClient.
+   *
+   * @param opts RequestOptions
    */
   public RemittancesClient(RequestOptions opts) {
     this.opts = opts;
@@ -84,8 +86,10 @@ public class RemittancesClient {
 
 
   /**
-   * @return
-   * @throws IOException
+   * Get access Token.
+   *
+   * @return AccessToken
+   * @throws IOException when network error
    */
   public AccessToken getToken() throws IOException {
     String credentials = Credentials.basic(this.opts.getRemittanceUserId(),
@@ -97,8 +101,10 @@ public class RemittancesClient {
 
 
   /**
-   * @return
-   * @throws IOException
+   * Get account balance.
+   *
+   * @return Balance
+   * @throws IOException when network error
    */
   public Balance getBalance() throws IOException {
     Response<Balance> balance = this.apiService
@@ -108,11 +114,13 @@ public class RemittancesClient {
   }
 
   /**
-   * @param ref
-   * @return
-   * @throws IOException
+   * Get transaction.
+   *
+   * @param ref String
+   * @return Transaction
+   * @throws IOException when network error
    */
-  public Transaction getTransactionStatus(String ref) throws IOException {
+  public Transaction getTransaction(String ref) throws IOException {
     Response<Transaction> transaction = this.apiService
         .getTransactionStatus(ref).execute();
     return transaction.body();
@@ -121,14 +129,16 @@ public class RemittancesClient {
 
 
   /**
-   * @param mobile
-   * @param amount
-   * @param externalId
-   * @param payeeNote
-   * @param payerMessage
-   * @param currency
-   * @return
-   * @throws IOException
+   * Transfer money.
+   *
+   * @param mobile       String
+   * @param amount       String
+   * @param externalId   String
+   * @param payeeNote    String
+   * @param payerMessage String
+   * @param currency     String
+   * @return String
+   * @throws IOException when network error
    */
   public String transfer(String mobile, String amount,
                          String externalId,

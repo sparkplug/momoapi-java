@@ -8,7 +8,7 @@ public class RemittancesSession {
   private Preferences prefs;
 
   /**
-   *
+   * RemittancesSession.
    */
   public RemittancesSession() {
     this.prefs = Preferences.userRoot().node(this.getClass().getName());
@@ -16,7 +16,9 @@ public class RemittancesSession {
 
 
   /**
-   * @param token
+   * Save token.
+   *
+   * @param token String
    */
   public void saveToken(String token) {
     prefs.put(TOKEN_NAME, token);
@@ -24,7 +26,9 @@ public class RemittancesSession {
 
 
   /**
-   * @return
+   * get Token.
+   *
+   * @return String
    */
   public String getToken() {
     // return the token that was saved earlier

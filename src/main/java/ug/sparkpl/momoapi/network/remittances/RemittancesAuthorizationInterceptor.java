@@ -33,8 +33,10 @@ public class RemittancesAuthorizationInterceptor implements Interceptor {
   private RequestOptions opts;
 
   /**
-   * @param session
-   * @param opts
+   * RemittancesAuthorizationInterceptor.
+   *
+   * @param session RemittancesSession
+   * @param opts    RequestOptions
    */
   public RemittancesAuthorizationInterceptor(RemittancesSession session, RequestOptions opts) {
 
@@ -42,7 +44,7 @@ public class RemittancesAuthorizationInterceptor implements Interceptor {
     this.opts = opts;
     this.logger = Logger.getLogger(RemittancesAuthorizationInterceptor.class.getName());
 
-    Gson gson = new GsonBuilder()
+    final Gson gson = new GsonBuilder()
         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
         .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
         .create();
@@ -79,7 +81,9 @@ public class RemittancesAuthorizationInterceptor implements Interceptor {
 
 
   /**
-   * @param initialRequest
+   * method wrapper to add auth headers.
+   *
+   * @param initialRequest Request
    * @return
    */
   private Request request(final Request initialRequest) {
@@ -99,9 +103,11 @@ public class RemittancesAuthorizationInterceptor implements Interceptor {
 
 
   /**
-   * @param chain
-   * @return
-   * @throws IOException
+   * intercept http request.
+   *
+   * @param chain Chain
+   * @return Response
+   * @throws IOException when network error
    */
   @Override
   public okhttp3.Response intercept(Chain chain) throws IOException {
@@ -131,8 +137,8 @@ public class RemittancesAuthorizationInterceptor implements Interceptor {
         Request.Builder builder = mainRequest.newBuilder().addHeader("Authorization",
             "Bearer " + this.session.getToken())
             .addHeader("Ocp-Apim-Subscription-Key", this.opts.getRemittancePrimaryKey())
-            .addHeader("X-Target-Environment", this.opts.getTargetEnvironment()).
-                method(mainRequest.method(), mainRequest.body());
+            .addHeader("X-Target-Environment", this.opts.getTargetEnvironment())
+            .method(mainRequest.method(), mainRequest.body());
         mainResponse = chain.proceed(builder.build());
       }
     } else if (!mainResponse.isSuccessful()) {

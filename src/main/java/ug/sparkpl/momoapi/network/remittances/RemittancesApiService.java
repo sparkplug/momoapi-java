@@ -35,7 +35,8 @@ public interface RemittancesApiService {
    */
   @POST("/remittance/token/")
   @Headers("Content-Type: application/json")
-  Call<AccessToken> getToken(@Header("Authorization") String credentials, @Header("Ocp-Apim-Subscription-Key") String subscriptionKey);
+  Call<AccessToken> getToken(@Header("Authorization") String credentials,
+                             @Header("Ocp-Apim-Subscription-Key") String subscriptionKey);
 
   /**
    * Get Account Balance.
@@ -47,7 +48,7 @@ public interface RemittancesApiService {
   /**
    * GetTransaction Status.
    *
-   * @param transactionId
+   * @param transactionId String
    * @return Transaction
    */
   @GET("/remittance/v1_0/transfer/{transactionId}")

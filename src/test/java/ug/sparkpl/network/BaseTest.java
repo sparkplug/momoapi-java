@@ -1,10 +1,11 @@
 package ug.sparkpl.network;
 
+import java.io.IOException;
+
 import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
-import okhttp3.mockwebserver.MockWebServer;
 
-import java.io.IOException;
+import okhttp3.mockwebserver.MockWebServer;
 
 import static org.jclouds.util.Strings2.toStringAndClose;
 
@@ -32,7 +33,8 @@ public class BaseTest {
    */
   public String payloadFromResource(final String resource) {
     try {
-      return new String(toStringAndClose(getClass().getResourceAsStream(resource)).getBytes(Charsets.UTF_8));
+      return new String(toStringAndClose(getClass().getResourceAsStream(resource))
+          .getBytes(Charsets.UTF_8));
     } catch (IOException e) {
       throw Throwables.propagate(e);
     }
