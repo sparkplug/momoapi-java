@@ -38,6 +38,7 @@ public class LiveCollectionsClientTest {
       assertNotNull(transactionRef);
 
       Balance bl = client.getBalance();
+      assertNotNull(bl);
 
       assertNotNull(bl.getBalance());
 
