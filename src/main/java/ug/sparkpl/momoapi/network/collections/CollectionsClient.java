@@ -66,9 +66,9 @@ public class CollectionsClient {
     okhttpbuilder.addInterceptor(httpLoggingInterceptor);
 
 
-    okhttpbuilder.connectTimeout(30, TimeUnit.SECONDS);
-    okhttpbuilder.readTimeout(30, TimeUnit.SECONDS);
-    okhttpbuilder.writeTimeout(30, TimeUnit.SECONDS);
+    okhttpbuilder.connectTimeout(60, TimeUnit.SECONDS);
+    okhttpbuilder.readTimeout(60, TimeUnit.SECONDS);
+    okhttpbuilder.writeTimeout(60, TimeUnit.SECONDS);
 
 
     this.httpClient = okhttpbuilder
@@ -164,7 +164,7 @@ public class CollectionsClient {
   public String requestToPay(HashMap<String, String> opts) throws IOException {
     RequestToPay rbody = new RequestToPay(opts.get("mobile"), opts.get("amount"),
         opts.get("externalId"), opts.get("payeeNote"), opts.get("payerMessage"),
-        this.opts.getCurrency());
+        opts.getOrDefault("currency", this.opts.getCurrency()));
     String ref = UUID.randomUUID().toString();
     this.apiService.requestToPay(rbody, ref).execute();
     return ref;

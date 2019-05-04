@@ -239,17 +239,17 @@ public class RequestOptions {
      * API version) as default values.
      */
     public Builder() {
-      this.collectionUserId = System.getenv("collectionUserId");
-      this.collectionApiSecret = System.getenv("collectionApiSecret");
-      this.collectionPrimaryKey = System.getenv("collectionPrimaryKey");
+      this.collectionUserId = System.getenv("COLLECTION_USER_ID");
+      this.collectionApiSecret = System.getenv("COLLECTION_API_SECRET");
+      this.collectionPrimaryKey = System.getenv("COLLECTION_PRIMARY_KEY");
 
-      this.remittancePrimaryKey = System.getenv("remittancePrimaryKey");
-      this.remittanceUserId = System.getenv("remittanceUserId");
-      this.remittanceApiSecret = System.getenv("remittanceApiSecret");
+      this.remittancePrimaryKey = System.getenv("REMITTANCE_PRIMARY_KEY");
+      this.remittanceUserId = System.getenv("REMITTANCE_USER_ID");
+      this.remittanceApiSecret = System.getenv("REMITTANCE_API_SECRET");
 
-      this.disbursementPrimaryKey = System.getenv("disbursementPrimaryKey");
-      this.disbursementUserId = System.getenv("disbursementUserId");
-      this.disbursementApiSecret = System.getenv("disbursementApiSecret");
+      this.disbursementPrimaryKey = System.getenv("DISBURSEMENT_PRIMARY_KEY");
+      this.disbursementUserId = System.getenv("DISBURSEMENT_USER_ID");
+      this.disbursementApiSecret = System.getenv("DISBURSEMENT_API_SECRET");
 
     }
 

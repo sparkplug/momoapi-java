@@ -1,4 +1,4 @@
 package ug.sparkpl.network.remittance;
 
-public class RemittanceClientTest {
+public class MockRemittanceClientTest {
 }

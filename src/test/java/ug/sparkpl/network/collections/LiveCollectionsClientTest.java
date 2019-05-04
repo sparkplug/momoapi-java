@@ -1,36 +1,28 @@
-package ug.sparkpl.momoapi;
+package ug.sparkpl.network.collections;
 
 import java.io.IOException;
 import java.util.HashMap;
 
+import ug.sparkpl.momoapi.models.Balance;
 import ug.sparkpl.momoapi.network.MomoApiException;
 import ug.sparkpl.momoapi.network.RequestOptions;
 import ug.sparkpl.momoapi.network.collections.CollectionsClient;
 
-import org.apache.commons.cli.ParseException;
+import org.junit.jupiter.api.Test;
 
+import static org.junit.Assert.assertNotNull;
 
-public class MomoApi {
+public class LiveCollectionsClientTest {
 
+  @Test
+  public void testRequestToPay() throws IOException {
 
-  MomoApi() {
-
-
-  }
-
-  /**
-   * Provision Sandbox Account.
-   *
-   * @param args providerCallBackHost and primaryKey(Ocp-Apim-Subscription-Key)
-   * @throws ParseException when args are missing
-   * @throws IOException    when network error occurs
-   */
-  public static void main(String[] args) throws ParseException, IOException {
-
-
-    // Make a request to pay call
     RequestOptions opts = RequestOptions.builder()
         .build();
+    assertNotNull(opts.getCollectionPrimaryKey());
+    assertNotNull(opts.getCollectionApiSecret());
+    assertNotNull(opts.getCollectionUserId());
+
 
     HashMap<String, String> collMap = new HashMap<String, String>();
     collMap.put("amount", "100");
@@ -43,12 +35,19 @@ public class MomoApi {
 
     try {
       String transactionRef = client.requestToPay(collMap);
-      System.out.println(transactionRef);
+      assertNotNull(transactionRef);
+
+      Balance bl = client.getBalance();
+
+      assertNotNull(bl.getBalance());
+
+
     } catch (MomoApiException e) {
       e.printStackTrace();
     }
 
 
   }
+
 
 }

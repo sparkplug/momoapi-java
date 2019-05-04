@@ -164,7 +164,7 @@ public class RemittancesClient {
     Transfer rbody = new Transfer(opts.get("mobile"),
         opts.get("amount"), opts.get("externalId"),
         opts.get("payeeNote"), opts.get("payerMessage"),
-        opts.get("currency"));
+        opts.getOrDefault("currency", this.opts.getCurrency()));
     String ref = UUID.randomUUID().toString();
     this.apiService.transfer(rbody, ref).execute();
     return ref;

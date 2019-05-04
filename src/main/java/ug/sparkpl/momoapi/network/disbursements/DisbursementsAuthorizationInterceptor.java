@@ -61,9 +61,9 @@ public class DisbursementsAuthorizationInterceptor implements Interceptor {
     okhttpbuilder.addInterceptor(httpLoggingInterceptor);
 
 
-    okhttpbuilder.connectTimeout(30, TimeUnit.SECONDS);
-    okhttpbuilder.readTimeout(30, TimeUnit.SECONDS);
-    okhttpbuilder.writeTimeout(30, TimeUnit.SECONDS);
+    okhttpbuilder.connectTimeout(60, TimeUnit.SECONDS);
+    okhttpbuilder.readTimeout(60, TimeUnit.SECONDS);
+    okhttpbuilder.writeTimeout(60, TimeUnit.SECONDS);
 
 
     OkHttpClient httpClient = okhttpbuilder
@@ -142,14 +142,20 @@ public class DisbursementsAuthorizationInterceptor implements Interceptor {
             .addHeader("X-Target-Environment", this.opts.getTargetEnvironment())
             .method(mainRequest.method(), mainRequest.body());
         mainResponse = chain.proceed(builder.build());
+
+
       }
-    } else if (!mainResponse.isSuccessful()) {
+    } else if (mainResponse.code() == 400 || mainResponse.code() == 500 || mainResponse.code() == 404) {
+      String error = "";
 
-      this.logger.log(Level.INFO, "<<<<<<<<<<<<<<< ETETETET  "
-          + mainResponse.code() + "  .." + mainResponse.body().string());
+      try {
+        error = mainResponse.body().string();
+      } catch (IllegalStateException e) {
+
+      }
 
 
-      throw new MomoApiException(mainResponse.body().string());
+      throw new MomoApiException(error);
 
 
     }

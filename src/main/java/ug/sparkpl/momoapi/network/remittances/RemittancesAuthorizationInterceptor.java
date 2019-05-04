@@ -141,17 +141,20 @@ public class RemittancesAuthorizationInterceptor implements Interceptor {
             .method(mainRequest.method(), mainRequest.body());
         mainResponse = chain.proceed(builder.build());
       }
-    } else if (!mainResponse.isSuccessful()) {
+    } else if (mainResponse.code() == 400 || mainResponse.code() == 500 || mainResponse.code() == 404) {
+      String error = "";
 
-      this.logger.log(Level.INFO, "<<<<<<<<<<<<<<< ETETETET  " + mainResponse.code() + "  .."
-          + mainResponse.body().string());
+      try {
+        error = mainResponse.body().string();
+      } catch (IllegalStateException e) {
+
+      }
 
 
-      throw new MomoApiException(mainResponse.body().string());
+      throw new MomoApiException(error);
 
 
     }
-
 
     return mainResponse;
   }

@@ -159,7 +159,7 @@ public class DisbursementsClient {
   public String transfer(HashMap<String, String> opts) throws IOException {
     Transfer rbody = new Transfer(opts.get("mobile"), opts.get("amount"),
         opts.get("externalId"), opts.get("payeeNote"),
-        opts.get("payerMessage"), this.opts.getCurrency());
+        opts.get("payerMessage"), opts.getOrDefault("currency", this.opts.getCurrency()));
     String ref = UUID.randomUUID().toString();
     this.apiService.transfer(rbody, ref).execute();
     return ref;
