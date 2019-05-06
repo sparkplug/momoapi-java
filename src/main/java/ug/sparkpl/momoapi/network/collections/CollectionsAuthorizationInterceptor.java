@@ -2,7 +2,6 @@ package ug.sparkpl.momoapi.network.collections;
 
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -116,63 +115,74 @@ public class CollectionsAuthorizationInterceptor implements Interceptor {
   public okhttp3.Response intercept(Chain chain) throws IOException {
 
 
-    try {
-      okhttp3.Response mainResponse = chain.proceed(request(chain.request()));
+    okhttp3.Response mainResponse = chain.proceed(request(chain.request()));
 
 
-      Request mainRequest = chain.request();
+    Request mainRequest = chain.request();
 
 
-      // if response code is 401 or 403, 'mainRequest' has encountered authentication error
-      if (mainResponse.code() == 401 || mainResponse.code() == 403) {
+    // if response code is 401 or 403, 'mainRequest' has encountered authentication error
+    if (mainResponse.code() == 401 || mainResponse.code() == 403) {
 
 
-        this.logger.log(Level.INFO, "<<<<<<<<<<<<<<<Getting Fresh Token");
+      this.logger.log(Level.INFO, "<<<<<<<<<<<<<<<Getting Fresh Token");
 
 
-        String credentials = Credentials.basic(this.opts.getCollectionUserId(),
-            this.opts.getCollectionApiSecret());
-        Response<AccessToken> loginResponse = this.apiService
-            .getToken(credentials, this.opts.getCollectionPrimaryKey()).execute();
+      String credentials = Credentials.basic(this.opts.getCollectionUserId(),
+          this.opts.getCollectionApiSecret());
+      Response<AccessToken> loginResponse = this.apiService
+          .getToken(credentials, this.opts.getCollectionPrimaryKey()).execute();
 
-        if (loginResponse.isSuccessful()) {
-          // login request succeed, new token generated
-          AccessToken token = loginResponse.body();
-          // save the new token
-          this.session.saveToken(token.getToken());
-          // retry the 'mainRequest' which encountered an authentication error
-          // add new token into 'mainRequest' header and request again
-          Request.Builder builder = mainRequest.newBuilder().addHeader("Authorization",
-              "Bearer " + this.session.getToken())
-              .addHeader("Ocp-Apim-Subscription-Key", this.opts.getCollectionPrimaryKey())
-              .addHeader("X-Target-Environment", this.opts.getTargetEnvironment())
-              .method(mainRequest.method(), mainRequest.body());
-          mainResponse = chain.proceed(builder.build());
-        }
-      } else if (mainResponse.code() == 400 || mainResponse.code() == 500 || mainResponse.code() == 404) {
-        String error = "";
+      if (loginResponse.isSuccessful()) {
+        // login request succeed, new token generated
+        AccessToken token = loginResponse.body();
+        // save the new token
+        this.session.saveToken(token.getToken());
+        // retry the 'mainRequest' which encountered an authentication error
+        // add new token into 'mainRequest' header and request again
+        Request.Builder builder = mainRequest.newBuilder().addHeader("Authorization",
+            "Bearer " + this.session.getToken())
+            .addHeader("Ocp-Apim-Subscription-Key", this.opts.getCollectionPrimaryKey())
+            .addHeader("X-Target-Environment", this.opts.getTargetEnvironment())
+            .method(mainRequest.method(), mainRequest.body());
+        mainResponse = chain.proceed(builder.build());
+       
+      }
+    } else if (mainResponse.code() == 400 || mainResponse.code() == 500 || mainResponse.code() == 404) {
+      String error = "";
 
-        try {
-          error = mainResponse.body().string();
-        } catch (IllegalStateException e) {
-
-        }
-
-
-        throw new MomoApiException(error);
-
+      try {
+        error = mainResponse.body().string();
+      } catch (IllegalStateException e) {
 
       }
 
 
-      return mainResponse;
+      throw new MomoApiException(error);
 
-    } catch (UnknownHostException exception) {
 
-      throw new MomoApiException("There is no internet connection.");
+    } else {
 
+      Integer numRequests = 0;
+
+      while (numRequests < 3) {
+
+        okhttp3.Response r = chain.proceed(chain.request());
+        if (r.isSuccessful()) {
+          return r;
+
+
+        }
+
+        numRequests++;
+      }
 
     }
+
+
+    return mainResponse;
+
+
   }
 
 }
