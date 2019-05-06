@@ -14,6 +14,12 @@ import static org.junit.Assert.assertNotNull;
 
 public class LiveDisbursementsClientTest {
 
+  /**
+   * Test disbursements.
+   *
+   * @throws IOException when netowk error.
+   */
+
   @Test
   public void testTransfer() throws IOException {
 

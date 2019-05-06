@@ -26,6 +26,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class LiveUserProvisioningTest {
 
+
+  /**
+   * Test user account provisioning.
+   *
+   * @throws IOException when network error.
+   */
   @Test
   public void testUserProvisioning() throws IOException {
 

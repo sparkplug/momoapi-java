@@ -14,6 +14,12 @@ import static org.junit.Assert.assertNotNull;
 
 public class LiveCollectionsClientTest {
 
+  /**
+   * Test request to pay.
+   *
+   * @throws IOException when network error
+   */
+
   @Test
   public void testRequestToPay() throws IOException {
 
