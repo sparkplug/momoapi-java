@@ -11,7 +11,6 @@ matrix:
     - jdk: openjdk10
     - jdk: oraclejdk11
     - jdk: openjdk11
-    - jdk: oraclejdk-ea
     - jdk: openjdk-ea
 
 notifications:
