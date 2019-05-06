@@ -13,9 +13,6 @@ matrix:
     - jdk: openjdk11
     - jdk: oraclejdk-ea
     - jdk: openjdk-ea
-  allow_failures:
-    - jdk: oraclejdk-ea
-    - jdk: openjdk-ea
 
 notifications:
   email:
