@@ -158,21 +158,6 @@ public class DisbursementsAuthorizationInterceptor implements Interceptor {
       throw new MomoApiException(error);
 
 
-    } else {
-
-      Integer numRequests = 0;
-
-      while (numRequests < 3) {
-
-        okhttp3.Response r = chain.proceed(chain.request());
-        if (r.isSuccessful()) {
-          return r;
-
-
-        }
-
-        numRequests++;
-      }
     }
 
 

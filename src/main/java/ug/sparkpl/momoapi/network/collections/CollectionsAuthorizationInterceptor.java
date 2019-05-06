@@ -146,7 +146,6 @@ public class CollectionsAuthorizationInterceptor implements Interceptor {
             .addHeader("X-Target-Environment", this.opts.getTargetEnvironment())
             .method(mainRequest.method(), mainRequest.body());
         mainResponse = chain.proceed(builder.build());
-       
       }
     } else if (mainResponse.code() == 400 || mainResponse.code() == 500 || mainResponse.code() == 404) {
       String error = "";
@@ -160,22 +159,6 @@ public class CollectionsAuthorizationInterceptor implements Interceptor {
 
       throw new MomoApiException(error);
 
-
-    } else {
-
-      Integer numRequests = 0;
-
-      while (numRequests < 3) {
-
-        okhttp3.Response r = chain.proceed(chain.request());
-        if (r.isSuccessful()) {
-          return r;
-
-
-        }
-
-        numRequests++;
-      }
 
     }
 
