@@ -1,6 +1,15 @@
-# MomoAPI Java Bindings
+# MTN MoMo API Java Client</h1>
 
-You can sign up for a MOMOAPI  account at https://https://momodeveloper.mtn.com
+<strong>Power your apps with our MTN MoMo API</strong>
+
+<div>
+  Join our active, engaged community: <br>
+  <a href="https://momodeveloper.mtn.com/">Website</a>
+  <span> | </span>
+  <a href="https://spectrum.chat/momo-api-developers/">Spectrum</a>
+  <br><br>
+</div>
+
 
 [![Build Status](https://travis-ci.com/sparkplug/momoapi-java.svg?branch=master)](https://travis-ci.com/sparkplug/momoapi-java)
 [![Coverage Status](https://coveralls.io/repos/github/sparkplug/momoapi-java/badge.svg?branch=master)](https://coveralls.io/github/sparkplug/momoapi-java?branch=master)
@@ -73,18 +82,9 @@ but can be overidden using the RequestOpts builder
 
 Once you have specified the global variables, you can now provide the product-specific variables. Each MoMo API product requires its own authentication details i.e its own `Subscription Key`, `User ID` and `User Secret`, also sometimes refered to as the `API Secret`. As such, we have to configure subscription keys for each product you will be using.
 
-
-
-The full list of configuration options can be seen in the example below:
-
-
 You will only need to configure the variables for the product(s) you will be using.
 
-
 ### Per-request Configuration
-
-
-
 
 ``` java
 
@@ -99,12 +99,10 @@ You will only need to configure the variables for the product(s) you will be usi
 
 ```
 
-## Usage
-
 
 ## Collections
 
-The collections client can be created with the following paramaters. Note that the `COLLECTION_USER_ID` and `COLLECTION_API_SECRET` for production are provided on the MTN OVA dashboard;
+The collections client can be created with the following paramaters. Note that the `COLLECTION_USER_ID` and `COLLECTION_API_SECRET` for production are provided on the MTN OVA dashboard.
 
 * `COLLECTION_PRIMARY_KEY`: Primary Key for the `Collection` product on the developer portal.
 * `COLLECTION_USER_ID`: For sandbox, use the one generated with the `mtnmomo` command.
@@ -149,7 +147,6 @@ public class MomoCollectionsExample {
     }
 }
 ```
-
 
 ### Methods
 
@@ -224,7 +221,7 @@ public class MomoDisbursementsExample {
 
 
 
-## Development
+## Development 
 
 You must have Gradle installed. To run the tests:
 
@@ -236,6 +233,4 @@ The library uses [Project Lombok][lombok]. While it is not a requirement, you mi
 [lombok]: https://projectlombok.org
 [lombok-plugins]: https://projectlombok.org/setup/overview
 
-<!--
-# vim: set tw=79:
--->
+# Thank you. 
