@@ -225,8 +225,9 @@ public class MomoDisbursementsExample {
 
 You must have Gradle installed. To run the tests:
 
+```bash
     ./gradlew test
-
+```
 
 The library uses [Project Lombok][lombok]. While it is not a requirement, you might want to install a [plugin][lombok-plugins] for your favorite IDE to facilitate development.
 
