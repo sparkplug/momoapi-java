@@ -9,14 +9,10 @@ import ug.sparkpl.momoapi.models.AccessToken;
 import ug.sparkpl.momoapi.models.Balance;
 import ug.sparkpl.momoapi.models.RequestToPay;
 import ug.sparkpl.momoapi.models.Transaction;
+import ug.sparkpl.momoapi.network.BaseClient;
 import ug.sparkpl.momoapi.network.RequestOptions;
-import ug.sparkpl.momoapi.utils.DateTimeTypeConverter;
 
-import org.joda.time.DateTime;
-
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
@@ -26,7 +22,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class CollectionsClient {
+public class CollectionsClient extends BaseClient {
 
 
   RequestOptions opts;
@@ -45,10 +41,7 @@ public class CollectionsClient {
    */
   public CollectionsClient(RequestOptions opts) {
     this.opts = opts;
-    this.gson = new GsonBuilder()
-        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-        .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
-        .create();
+    this.gson = getGson();
 
     this.session = new CollectionSession();
 

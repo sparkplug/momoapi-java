@@ -17,7 +17,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-class BaseClient {
+public class BaseClient {
 
 
   /**
@@ -25,7 +25,7 @@ class BaseClient {
    *
    * @return Gson
    */
-  Gson getGson() {
+  public Gson getGson() {
     return new GsonBuilder()
         .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
         .registerTypeAdapter(DateTime.class, new DateTimeTypeConverter())
@@ -37,16 +37,15 @@ class BaseClient {
    * create Retrofit.
    *
    * @param apiEndpoint  String
-   * @param gson         Gson
    * @param okHttpClient OkHttpClient
    * @return Retrofit
    */
-  Retrofit createRetrofit(final String apiEndpoint, final Gson gson,
+  Retrofit createRetrofit(final String apiEndpoint,
                           final @NonNull OkHttpClient okHttpClient) {
     return new Retrofit.Builder()
         .client(okHttpClient)
         .baseUrl(apiEndpoint)
-        .addConverterFactory(GsonConverterFactory.create(gson))
+        .addConverterFactory(GsonConverterFactory.create(getGson()))
         .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
         .build();
   }
@@ -79,14 +78,12 @@ class BaseClient {
    * Get Api Retrofit.
    *
    * @param apiEndpoint  String
-   * @param gson         Gson
    * @param okHttpClient OkHttpClient
    * @return Retrofit
    */
   Retrofit getApiRetrofit(final @NonNull String apiEndpoint,
-                          final @NonNull Gson gson,
                           final @NonNull OkHttpClient okHttpClient) {
-    return createRetrofit(apiEndpoint, gson, okHttpClient);
+    return createRetrofit(apiEndpoint, okHttpClient);
   }
 
 

@@ -20,7 +20,7 @@ Add this dependency to your project's POM:
 <dependency>
   <groupId>ug.sparkpl</groupId>
   <artifactId>mtnmomo-java</artifactId>
-  <version>1.0.0</version>
+  <version>1.2.0</version>
 </dependency>
 ```
 
@@ -179,7 +179,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ug.sparkpl.momoapi.network.RequestOptions;
-import ug.sparkpl.momoapi.network.collections.CollectionsClient;
+import ug.sparkpl.momoapi.network.disbursements.DisbursementsClient;
 
 
 public class MomoDisbursementsExample {
