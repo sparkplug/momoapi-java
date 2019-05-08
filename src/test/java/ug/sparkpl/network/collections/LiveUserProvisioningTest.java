@@ -66,10 +66,12 @@ public class LiveUserProvisioningTest {
     String token = UUID.randomUUID().toString();
 
     Response<Void> res = apiService
-        .provisonUser(System.getenv("COLLECTION_PRIMARY_KEY"), token, new NewUser("ubuntudata.com"))
+        .provisonUser(System.getenv("COLLECTION_PRIMARY_KEY"), token,
+            new NewUser("ubuntudata.com"))
         .execute();
 
-    Response<User> user = apiService.getUser(token, System.getenv("COLLECTION_PRIMARY_KEY")).execute();
+    Response<User> user = apiService.getUser(token,
+        System.getenv("COLLECTION_PRIMARY_KEY")).execute();
     assertNotNull(user);
 
 

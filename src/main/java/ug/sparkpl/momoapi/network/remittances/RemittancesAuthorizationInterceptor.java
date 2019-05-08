@@ -141,12 +141,14 @@ public class RemittancesAuthorizationInterceptor implements Interceptor {
             .method(mainRequest.method(), mainRequest.body());
         mainResponse = chain.proceed(builder.build());
       }
-    } else if (mainResponse.code() == 400 || mainResponse.code() == 500 || mainResponse.code() == 404) {
+    } else if (mainResponse.code() == 400 || mainResponse.code() == 500
+        || mainResponse.code() == 404) {
       String error = "";
 
       try {
         error = mainResponse.body().string();
       } catch (IllegalStateException e) {
+        this.logger.log(Level.SEVERE, e.toString());
 
       }
 

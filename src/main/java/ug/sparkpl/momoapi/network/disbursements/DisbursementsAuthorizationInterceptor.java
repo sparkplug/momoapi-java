@@ -145,12 +145,15 @@ public class DisbursementsAuthorizationInterceptor implements Interceptor {
 
 
       }
-    } else if (mainResponse.code() == 400 || mainResponse.code() == 500 || mainResponse.code() == 404) {
+    } else if (mainResponse.code() == 400 || mainResponse.code() == 500
+        || mainResponse.code() == 404) {
       String error = "";
 
       try {
         error = mainResponse.body().string();
       } catch (IllegalStateException e) {
+
+        this.logger.log(Level.SEVERE, e.toString());
 
       }
 

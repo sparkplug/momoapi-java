@@ -66,7 +66,7 @@ public class BaseTest {
   }
 
   /**
-   * Get retrofit token
+   * Get retrofit token.
    *
    * @param url String
    * @return Retrofit
