@@ -38,7 +38,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "ug.sparkpl:mtnmomo-java:1.0.0"
+compile "ug.sparkpl:mtnmomo-java:1.2.0"
 ```
 
 # Sandbox Environment
